@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Canal oficial do Machado Gamer — lives, reacts e gameplays na Twitch. Assista ao vivo e siga nas redes sociais." />
+  <meta name="theme-color" content="#F09000" />
+
+  <!-- Open Graph (preview ao compartilhar o link) -->
+  <meta property="og:title" content="Machado Gamer — Canal Oficial" />
+  <meta property="og:description" content="Lives, reacts e gameplays na Twitch. Assista ao vivo!" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/banner.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <title>Machado Gamer — Canal Oficial</title>
+
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Russo+One&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Âncora do topo (fora do header sticky, para o scroll funcionar certo) -->
+  <span id="topo" aria-hidden="true"></span>
+
+  <!-- ===================== HEADER / NAV ===================== -->
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#topo" aria-label="Machado Gamer - início">
+        <img src="assets/logo-machado.png" alt="Machado Gamer" class="brand-logo" />
+      </a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="main-nav" id="mainNav" aria-label="Navegação principal">
+        <a href="#aovivo">Ao vivo</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#agenda">Agenda</a>
+        <a href="#redes">Redes</a>
+        <a class="btn btn-primary btn-sm" href="https://www.twitch.tv/machadogameroficial" target="_blank" rel="noopener">Seguir na Twitch</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="container hero-content">
+      <span class="badge"><span class="dot"></span> Canal Oficial</span>
+      <h1 class="hero-title">
+        <img src="assets/logo-machado.png" alt="Machado Gamer" class="hero-logo" />
+      </h1>
+      <!-- TROCAR: tagline/bio curta abaixo -->
+      <p class="hero-tagline">Reacts, gameplays e muita zoeira ao vivo. Chega mais e cola na live! 🎮🪓</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#aovivo">▶ Assistir ao vivo</a>
+        <a class="btn btn-ghost" href="https://www.instagram.com/machadogameroficial/" target="_blank" rel="noopener">Ver no Instagram</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLAYER AO VIVO ===================== -->
+  <section class="section" id="aovivo">
+    <div class="container">
+      <header class="section-head">
+        <h2 class="section-title">🔴 Transmissão ao vivo</h2>
+        <p class="section-sub">Quando estou online, a live aparece aqui automaticamente. Offline? Ative as notificações na Twitch!</p>
+      </header>
+
+      <div class="stream-grid">
+        <div class="stream-video card">
+          <!-- O parâmetro parent DEVE ser o domínio onde o site está hospedado -->
+          <iframe
+            src="https://player.twitch.tv/?channel=machadogameroficial&parent=romulocreso.github.io&muted=false"
+            title="Player ao vivo da Twitch - Machado Gamer"
+            allowfullscreen
+            loading="lazy"
+            scrolling="no"></iframe>
+        </div>
+        <div class="stream-chat card">
+          <iframe
+            src="https://www.twitch.tv/embed/machadogameroficial/chat?parent=romulocreso.github.io&darkpopout"
+            title="Chat da Twitch - Machado Gamer"
+            loading="lazy"></iframe>
+        </div>
+      </div>
+
+      <!-- Carrossel de VODs / clipes -->
+      <div class="vods">
+        <div class="vods-head">
+          <h3>🎬 Vídeos &amp; clipes</h3>
+          <div class="carousel-nav">
+            <button class="car-btn" id="vodPrev" aria-label="Anterior">&#8249;</button>
+            <button class="car-btn" id="vodNext" aria-label="Próximo">&#8250;</button>
+          </div>
+        </div>
+        <!-- Preenchido automaticamente a partir de data/twitch-videos.json -->
+        <div class="carousel" id="vodCarousel"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SOBRE + GALERIA ===================== -->
+  <section class="section section-alt" id="sobre">
+    <div class="container">
+      <header class="section-head">
+        <h2 class="section-title">Sobre o canal</h2>
+      </header>
+
+      <div class="about-grid">
+        <div class="about-media">
+          <img src="assets/perfil.svg" alt="Foto do Machado Gamer" class="about-photo" /><!-- TROCAR: perfil.svg/jpg em /assets -->
+        </div>
+        <div class="about-text">
+          <!-- TROCAR: texto de apresentação abaixo -->
+          <p>E aí, galera! Eu sou o <strong>Machado Gamer</strong>, criador de conteúdo focado em reacts, gameplays e diversão ao vivo. Aqui o clima é leve, com muita interação com a galera do chat.</p>
+          <p>Cola nas lives, deixa o follow e faz parte dessa comunidade! 🪓</p>
+          <ul class="about-stats">
+            <li>
+              <strong id="twitchFollowers" data-channel="machadogameroficial" title="Atualizado automaticamente">…</strong>
+              <span>📺 Seguidores Twitch</span>
+            </li>
+            <li>
+              <!-- Atualizado automaticamente pelo GitHub Action (data/instagram.json) -->
+              <strong id="igFollowers" title="Atualizado automaticamente">29K</strong>
+              <span>📸 Seguidores Instagram</span>
+            </li>
+            <li><strong>🎮</strong><span>Vários games</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 class="gallery-title">Galeria</h3>
+      <div class="gallery">
+        <!-- TROCAR: substitua os src por suas fotos/clipes em /assets -->
+        <img src="assets/galeria-1.svg" alt="Destaque 1" loading="lazy" />
+        <img src="assets/galeria-2.svg" alt="Destaque 2" loading="lazy" />
+        <img src="assets/galeria-3.svg" alt="Destaque 3" loading="lazy" />
+        <img src="assets/galeria-4.svg" alt="Destaque 4" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== AGENDA ===================== -->
+  <section class="section" id="agenda">
+    <div class="container">
+      <header class="section-head">
+        <h2 class="section-title">🗓️ Agenda de lives</h2>
+        <p class="section-sub">Horário de Brasília. Pode variar — confirme nas redes!</p>
+      </header>
+
+      <!-- TROCAR: dias e horários reais abaixo -->
+      <div class="schedule">
+        <div class="schedule-card card">
+          <span class="schedule-day">Terça</span>
+          <span class="schedule-time">20h00</span>
+          <span class="schedule-game">React + bate-papo</span>
+        </div>
+        <div class="schedule-card card">
+          <span class="schedule-day">Quinta</span>
+          <span class="schedule-time">20h00</span>
+          <span class="schedule-game">Gameplay</span>
+        </div>
+        <div class="schedule-card card">
+          <span class="schedule-day">Sábado</span>
+          <span class="schedule-time">16h00</span>
+          <span class="schedule-game">Live especial</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== REDES SOCIAIS ===================== -->
+  <section class="section section-alt" id="redes">
+    <div class="container">
+      <header class="section-head">
+        <h2 class="section-title">Redes sociais</h2>
+        <p class="section-sub">Segue em todas pra não perder nada!</p>
+      </header>
+
+      <div class="socials">
+        <a class="social-card twitch" href="https://www.twitch.tv/machadogameroficial" target="_blank" rel="noopener">
+          <span class="social-icon">📺</span>
+          <span class="social-name">Twitch</span>
+          <span class="social-handle">@machadogameroficial</span>
+        </a>
+        <a class="social-card instagram" href="https://www.instagram.com/machadogameroficial/" target="_blank" rel="noopener">
+          <span class="social-icon">📸</span>
+          <span class="social-name">Instagram</span>
+          <span class="social-handle">@machadogameroficial</span>
+        </a>
+        <a class="social-card tiktok" href="https://www.tiktok.com/@machadogameroficial" target="_blank" rel="noopener">
+          <span class="social-icon">🎵</span>
+          <span class="social-name">TikTok</span>
+          <span class="social-handle">@machadogameroficial</span>
+        </a>
+        <a class="social-card whatsapp" href="https://chat.whatsapp.com/Jx8z30BFPOz9tvwlloa07x" target="_blank" rel="noopener">
+          <span class="social-icon">💬</span>
+          <span class="social-name">WhatsApp</span>
+          <span class="social-handle">Entrar no grupo</span>
+        </a>
+        <a class="social-card midfielder" href="https://midfielder.tv.br/machadogamer92" target="_blank" rel="noopener">
+          <span class="social-icon">📺</span>
+          <span class="social-name">Midfielder.TV</span>
+          <span class="social-handle">Live PIX</span>
+        </a>
+        <!-- TROCAR/ADICIONAR: descomente e edite os links abaixo se tiver -->
+        <!--
+        <a class="social-card youtube" href="#" target="_blank" rel="noopener">
+          <span class="social-icon">▶️</span>
+          <span class="social-name">YouTube</span>
+          <span class="social-handle">@seucanal</span>
+        </a>
+        <a class="social-card tiktok" href="#" target="_blank" rel="noopener">
+          <span class="social-icon">🎵</span>
+          <span class="social-name">TikTok</span>
+          <span class="social-handle">@seuusuario</span>
+        </a>
+        <a class="social-card discord" href="#" target="_blank" rel="noopener">
+          <span class="social-icon">💬</span>
+          <span class="social-name">Discord</span>
+          <span class="social-handle">Entrar no servidor</span>
+        </a>
+        -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== RODAPÉ ===================== -->
+  <footer class="site-footer">
+    <div class="container footer-wrap">
+      <span class="brand-name">MACHADO<span class="accent">GAMER</span></span>
+      <p>&copy; <span id="ano"></span> Machado Gamer. Todos os direitos reservados.</p>
+      <p class="footer-credits">Feito com 💜 para a comunidade.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

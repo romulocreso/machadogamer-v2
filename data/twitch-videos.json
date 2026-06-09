@@ -1,0 +1,10 @@
+{
+  "_comentario": "Lista de videos/clipes do carrossel. type: 'video' (VOD) ou 'clip'. id: o numero do VOD ou o slug do clipe. title: legenda (pode editar).",
+  "channel": "machadogameroficial",
+  "videos": [
+    { "type": "video", "id": "2780437787", "title": "Replay da live #1" },
+    { "type": "video", "id": "2788305019", "title": "Replay da live #2" },
+    { "type": "video", "id": "2789960164", "title": "Replay da live #3" },
+    { "type": "video", "id": "2785201520", "title": "Replay da live #4" }
+  ]
+}
