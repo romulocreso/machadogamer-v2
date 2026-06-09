@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
   <defs>
     <radialGradient id="b" cx="30%" cy="30%" r="80%">
-      <stop offset="0" stop-color="#f09000"/>
-      <stop offset="1" stop-color="#100d0a"/>
+      <stop offset="0" stop-color="#caa877"/>
+      <stop offset="1" stop-color="#13120e"/>
     </radialGradient>
   </defs>
   <rect width="1200" height="630" fill="url(#b)"/>
   <text x="600" y="320" font-family="Arial, sans-serif" font-size="90" font-weight="bold" fill="#fff" text-anchor="middle">MACHADO GAMER</text>
-  <text x="600" y="385" font-family="Arial, sans-serif" font-size="32" fill="#ffb13d" text-anchor="middle">Canal Oficial</text>
+  <text x="600" y="385" font-family="Arial, sans-serif" font-size="32" fill="#caa877" text-anchor="middle">Canal Oficial</text>
 </svg>
