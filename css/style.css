@@ -197,7 +197,7 @@ a { color: inherit; text-decoration: none; }
 
 /* ===================== SOBRE + GALERIA ===================== */
 .about-grid { display: grid; grid-template-columns: 320px 1fr; gap: 40px; align-items: center; }
-.about-photo { width: 100%; border-radius: var(--radius); border: 2px solid var(--sand); aspect-ratio: 1; object-fit: cover; box-shadow: var(--shadow); }
+.about-photo { width: 100%; border-radius: 50%; border: 2px solid var(--sand); aspect-ratio: 1; object-fit: cover; box-shadow: var(--shadow); }
 .about-text p { color: var(--text-dim); margin-bottom: 14px; }
 .about-text strong { color: var(--text); }
 .about-stats { list-style: none; display: flex; gap: 28px; margin-top: 22px; flex-wrap: wrap; }
