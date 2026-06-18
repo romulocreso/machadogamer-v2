@@ -2,7 +2,7 @@
 
 Site do canal **Machado Gamer** com player da Twitch ao vivo, agenda de lives, galeria e links das redes sociais.
 
-🌐 **Site no ar:** https://romulocreso.github.io/machadogamer
+🌐 **Site no ar:** https://machadogamer.com
 
 ---
 
