@@ -136,7 +136,16 @@ a { color: inherit; text-decoration: none; }
 
 /* ===================== SEÇÕES GERAIS ===================== */
 .section { padding: 70px 0; }
-.section-alt { background: var(--bg-alt); }
+/* Fundo alternado com bordas que dissolvem nas secoes vizinhas (transicao suave) */
+.section-alt {
+  background: linear-gradient(
+    180deg,
+    var(--bg) 0%,
+    var(--bg-alt) 14%,
+    var(--bg-alt) 86%,
+    var(--bg) 100%
+  );
+}
 .section-head { text-align: center; margin-bottom: 44px; }
 .section-title { font-size: clamp(1.7rem, 4vw, 2.5rem); color: var(--sand); }
 /* divisor com losango western */
