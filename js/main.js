@@ -40,10 +40,16 @@ if (twEl) {
 const liveDot = document.getElementById('liveDot');
 if (liveDot) {
   const canal = liveDot.dataset.channel;
+  const liveMsg = document.getElementById('liveMsg');
   const setStatus = (online) => {
     liveDot.classList.remove('is-checking', 'is-online', 'is-offline');
     liveDot.classList.add(online ? 'is-online' : 'is-offline');
     liveDot.title = online ? 'AO VIVO agora' : 'Offline';
+    if (liveMsg) {
+      liveMsg.textContent = online
+        ? '🎮 Tô AO VIVO agora! Cola na live e vem trocar ideia no chat!'
+        : 'No momento estamos offline. Ative as notificações na Twitch e não perca a próxima live!';
+    }
   };
   const checkLive = () => {
     fetch(`https://decapi.me/twitch/uptime/${canal}`, { cache: 'no-store' })
