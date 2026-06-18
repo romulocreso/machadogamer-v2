@@ -151,12 +151,29 @@ a { color: inherit; text-decoration: none; }
   border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);
 }
 
-/* ===================== PLAYER / CHAT ===================== */
-.stream-grid { display: grid; grid-template-columns: 1fr 340px; gap: 18px; }
-.stream-video { position: relative; padding-top: 0; aspect-ratio: 16 / 9; overflow: hidden; }
-.stream-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-.stream-chat { overflow: hidden; min-height: 480px; }
-.stream-chat iframe { width: 100%; height: 100%; min-height: 480px; border: 0; display: block; }
+/* ===================== STATUS AO VIVO (bolinha) ===================== */
+.live-title { display: inline-flex; align-items: center; gap: 14px; }
+.live-dot {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: #888; flex: 0 0 auto;
+  transition: background-color .3s ease, box-shadow .3s ease;
+}
+/* Offline = vermelho */
+.live-dot.is-offline { background: #e23b3b; box-shadow: 0 0 0 4px rgba(226, 59, 59, .18); }
+/* Online (ao vivo) = verde, com pulso */
+.live-dot.is-online {
+  background: #2ecc71; box-shadow: 0 0 0 4px rgba(46, 204, 113, .22);
+  animation: livePulse 1.6s ease-in-out infinite;
+}
+/* Verificando = cinza neutro */
+.live-dot.is-checking { background: #888; opacity: .6; }
+@keyframes livePulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(46, 204, 113, .22); }
+  50% { box-shadow: 0 0 0 9px rgba(46, 204, 113, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .live-dot.is-online { animation: none; }
+}
 
 /* ===================== CARROSSEL DE VODs / CLIPES ===================== */
 .vods { margin-top: 34px; }
@@ -277,8 +294,6 @@ a { color: inherit; text-decoration: none; }
 
 /* ===================== RESPONSIVO ===================== */
 @media (max-width: 920px) {
-  .stream-grid { grid-template-columns: 1fr; }
-  .stream-chat { min-height: 420px; }
   .about-grid { grid-template-columns: 1fr; text-align: center; }
   .about-media { max-width: 280px; margin: 0 auto; }
   .about-stats { justify-content: center; }

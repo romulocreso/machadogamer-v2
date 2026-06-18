@@ -34,6 +34,28 @@ if (twEl) {
     .catch(() => { twEl.textContent = '—'; });
 }
 
+// ===== Status AO VIVO (bolinha verde/vermelha) =====
+// Usa o DecAPI (gratuito, sem token). O endpoint /uptime retorna o tempo de
+// transmissão quando o canal está online, ou "... is offline" quando offline.
+const liveDot = document.getElementById('liveDot');
+if (liveDot) {
+  const canal = liveDot.dataset.channel;
+  const setStatus = (online) => {
+    liveDot.classList.remove('is-checking', 'is-online', 'is-offline');
+    liveDot.classList.add(online ? 'is-online' : 'is-offline');
+    liveDot.title = online ? 'AO VIVO agora' : 'Offline';
+  };
+  const checkLive = () => {
+    fetch(`https://decapi.me/twitch/uptime/${canal}`, { cache: 'no-store' })
+      .then((r) => r.text())
+      .then((txt) => setStatus(!/offline/i.test(txt)))
+      .catch(() => setStatus(false));
+  };
+  checkLive();
+  // Reverifica a cada 60s para refletir mudanças sem recarregar a página.
+  setInterval(checkLive, 60000);
+}
+
 // ===== Seguidores do Instagram (atualizado por GitHub Action) =====
 // Um workflow lê o perfil a cada 6h e grava data/instagram.json.
 // Se a leitura falhar, mantém o último valor escrito no HTML.
