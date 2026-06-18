@@ -34,58 +34,6 @@ if (twEl) {
     .catch(() => { twEl.textContent = '—'; });
 }
 
-// ===== Carrossel de vídeos/clipes da Twitch =====
-const carousel = document.getElementById('vodCarousel');
-if (carousel) {
-  // Usa o domínio atual como "parent" (funciona no GitHub Pages e em localhost)
-  const PARENT = location.hostname || 'romulocreso.github.io';
-  const CANAL_VIDEOS = 'https://www.twitch.tv/machadogameroficial/videos';
-
-  const novoSlide = (html) => {
-    const el = document.createElement('div');
-    el.className = 'car-slide';
-    el.innerHTML = html;
-    return el;
-  };
-
-  const cardVazio = () => novoSlide(
-    `<a class="vod-empty" href="${CANAL_VIDEOS}" target="_blank" rel="noopener">
-       <span class="vod-empty-ic">🎬</span>
-       <strong>Ver todos os vídeos</strong>
-       <span>no canal da Twitch →</span>
-     </a>`
-  );
-
-  fetch('data/twitch-videos.json', { cache: 'no-store' })
-    .then((r) => (r.ok ? r.json() : Promise.reject()))
-    .then((data) => {
-      const vids = (data && Array.isArray(data.videos)) ? data.videos : [];
-      if (!vids.length) { carousel.appendChild(cardVazio()); return; }
-      vids.forEach((v) => {
-        const src = v.type === 'clip'
-          ? `https://clips.twitch.tv/embed?clip=${encodeURIComponent(v.id)}&parent=${PARENT}&autoplay=false`
-          : `https://player.twitch.tv/?video=${encodeURIComponent(v.id)}&parent=${PARENT}&autoplay=false`;
-        carousel.appendChild(novoSlide(
-          `<div class="vod-frame">
-             <iframe src="${src}" title="${v.title || 'Vídeo da Twitch'}" allowfullscreen loading="lazy" scrolling="no"></iframe>
-           </div>
-           ${v.title ? `<p class="vod-title">${v.title}</p>` : ''}`
-        ));
-      });
-    })
-    .catch(() => { carousel.appendChild(cardVazio()); });
-
-  // Setas de navegação (rolam ~1 card por clique)
-  const passo = () => {
-    const s = carousel.querySelector('.car-slide');
-    return s ? s.getBoundingClientRect().width + 16 : 360;
-  };
-  const prev = document.getElementById('vodPrev');
-  const next = document.getElementById('vodNext');
-  if (prev) prev.addEventListener('click', () => carousel.scrollBy({ left: -passo(), behavior: 'smooth' }));
-  if (next) next.addEventListener('click', () => carousel.scrollBy({ left: passo(), behavior: 'smooth' }));
-}
-
 // ===== Seguidores do Instagram (atualizado por GitHub Action) =====
 // Um workflow lê o perfil a cada 6h e grava data/instagram.json.
 // Se a leitura falhar, mantém o último valor escrito no HTML.
