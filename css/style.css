@@ -227,7 +227,15 @@ a { color: inherit; text-decoration: none; }
   transition: transform .2s, box-shadow .2s, border-color .2s;
 }
 .social-card:hover { transform: translateY(-5px); border-color: var(--sand); }
-.social-icon { font-size: 2.2rem; }
+.social-icon { display: inline-flex; align-items: center; justify-content: center; color: var(--text); transition: color .2s; }
+.social-icon svg { width: 38px; height: 38px; display: block; }
+.social-card.twitch .social-icon { color: #9146ff; }
+.social-card.instagram .social-icon { color: #e1306c; }
+.social-card.youtube .social-icon { color: #ff0000; }
+.social-card.tiktok .social-icon { color: #25f4ee; }
+.social-card.discord .social-icon { color: #5865f2; }
+.social-card.whatsapp .social-icon { color: #25d366; }
+.social-card.midfielder .social-icon { color: var(--accent); }
 .social-name { font-weight: 700; font-size: 1.1rem; color: var(--text); }
 .social-handle { color: var(--text-dim); font-size: 0.85rem; }
 .social-card.twitch:hover { border-color: #9146ff; box-shadow: 0 10px 26px rgba(145,70,255,.35); }
