@@ -18,7 +18,7 @@ Tudo que você precisa trocar está marcado no `index.html` com o comentário `<
 | Vídeos/clipes do carrossel | `data/twitch-videos.json` (veja abaixo) |
 | Links de redes (YouTube, TikTok, Discord) | `index.html` → seção "Redes" (descomente os blocos) |
 | Seguidores Twitch | **Automático** — atualiza sozinho via DecAPI (não precisa mexer) |
-| Seguidores Instagram | Manual — edite o campo `followers` em `data/instagram.json` (o Instagram bloqueia leitura automática por servidores). Atual: "29K". Para número exato e automático seria preciso a API oficial (conta Business). |
+| Seguidores Instagram | **Automático** — um GitHub Action (`.github/workflows/instagram.yml`) atualiza sozinho a cada 6h (veja abaixo). Não precisa mexer. |
 
 ### Trocar uma imagem
 1. Salve sua imagem na pasta `assets/` (ex.: `perfil.jpg`).
@@ -54,6 +54,31 @@ Edite `data/twitch-videos.json` e preencha a lista `videos`. Cada item:
 
 ---
 
+## Seguidores do Instagram (automático)
+
+O número de seguidores do Instagram atualiza sozinho, sem precisar editar nada.
+
+- **Como funciona:** o workflow `.github/workflows/instagram.yml` roda a cada 6h,
+  lê o perfil `@machadogameroficial` e grava o número em `data/instagram.json`,
+  fazendo commit sozinho. A página lê esse arquivo e mostra o valor.
+- **Dois caminhos de leitura:** primeiro tenta a API interna do Instagram (número
+  exato, ex.: `30177` → `30,2K`); se for bloqueada, cai para a meta-descrição que
+  o Instagram entrega a robôs (número já abreviado, ex.: `30K`).
+- **Rodar na mão:** aba **Actions** do GitHub → workflow *"Atualiza seguidores do
+  Instagram"* → **Run workflow**.
+
+> ⚠️ **Limitação:** o Instagram bloqueia acessos de servidor de forma
+> imprevisível, então **algumas rodadas podem falhar**. Quando isso acontece, a
+> página simplesmente mantém o último número até a próxima leitura bem-sucedida
+> (nunca quebra). Se a falha virar crônica, o caminho definitivo é a **API oficial
+> (Graph API)**, que exige conta Business/Creator vinculada a uma Página do Facebook.
+
+> 🔧 **Pré-requisito (já configurado):** em *Settings → Actions → General →
+> Workflow permissions*, precisa estar marcado **"Read and write permissions"**
+> para o robô conseguir commitar o JSON.
+
+---
+
 ## Como publicar atualizações
 
 Depois de editar qualquer arquivo, rode na pasta do projeto:
@@ -83,4 +108,5 @@ assets/           Imagens (logo, perfil, banner, galeria)
   Se um dia mudar o domínio do site, atualize esse valor no `index.html`,
   senão o player não carrega.
 - O Instagram não permite embutir o feed completo sem API; por isso usamos
-  um botão/link para o perfil.
+  um botão/link para o perfil. O contador de seguidores é atualizado por um
+  GitHub Action (veja a seção "Seguidores do Instagram (automático)").
