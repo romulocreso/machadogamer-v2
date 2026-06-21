@@ -12,6 +12,9 @@ jobs:
   relatorio:
     runs-on: ubuntu-latest
     steps:
+      - name: Baixa o repositório
+        uses: actions/checkout@v4
+
       - name: Coleta dados do GoatCounter e envia no WhatsApp
         env:
           GC_TOKEN: ${{ secrets.GOATCOUNTER_TOKEN }}
@@ -39,9 +42,17 @@ jobs:
           [ -z "$PIX" ] && PIX=0
           [ -z "$REFS" ] && REFS="- (sem dados ainda)"
 
+          # ---- Seguidores nas redes sociais ----
+          # Twitch: DecAPI (aberta, não bloqueia servidor). Formata 2144 -> 2.144.
+          TW=$(curl -s --retry 3 "https://decapi.me/twitch/followcount/machadogameroficial")
+          case "$TW" in (*[!0-9]*|"") TW="n/d";; (*) TW=$(echo "$TW" | sed ':a;s/\B[0-9]\{3\}\>/.&/;ta');; esac
+
+          # Instagram: lê o número já mantido pelo outro robô (data/instagram.json).
+          IG=$(jq -r '.followers // "n/d"' data/instagram.json 2>/dev/null || echo "n/d")
+
           # ---- Monta a mensagem (printf evita espaços indevidos da indentação) ----
-          MSG=$(printf '📊 Machado Gamer - ultimos 7 dias\n\n👁️ Visitas: %s\n💸 Cliques no PIX: %s\n\n🔝 De onde vieram:\n%s\n\nPainel: machadogamer.goatcounter.com' \
-            "$TOTAL" "$PIX" "$REFS")
+          MSG=$(printf '📊 Machado Gamer - ultimos 7 dias\n\n👁️ Visitas: %s\n💸 Cliques no PIX: %s\n\n🔝 De onde vieram:\n%s\n\n👥 Seguidores:\n- Twitch: %s\n- Instagram: %s\n\nPainel: machadogamer.goatcounter.com' \
+            "$TOTAL" "$PIX" "$REFS" "$TW" "$IG")
 
           echo "----- Prévia da mensagem -----"
           echo "$MSG"
