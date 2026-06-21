@@ -18,20 +18,25 @@ jobs:
           CMB_KEY: ${{ secrets.CALLMEBOT_APIKEY }}
           PHONE: ${{ secrets.WHATSAPP_PHONE }}
         run: |
-          set -e
+          set -u
           BASE="https://machadogamer.goatcounter.com/api/v0"
           AUTH="Authorization: Bearer $GC_TOKEN"
 
-          # ---- Total de visitas dos últimos 7 dias (padrão da API) ----
-          TOTAL=$(curl -s -H "$AUTH" "$BASE/stats/total" | jq -r '.total // 0')
+          # Busca com repetição automática; entre chamadas dá uma pausa pra não
+          # esbarrar no limite de taxa da API (que pode devolver resposta inválida).
+          fetch() { curl -s --retry 3 --retry-delay 3 -H "$AUTH" "$1"; }
 
-          # ---- Cliques no botão PIX (evento gravado como "clique-pix") ----
-          PIX=$(curl -s -H "$AUTH" "$BASE/stats/hits?limit=100" \
-            | jq -r '[.hits[]? | select(.path | test("clique-pix")) | .count] | add // 0')
+          R_TOTAL=$(fetch "$BASE/stats/total");            sleep 1
+          R_HITS=$(fetch "$BASE/stats/hits?limit=100");    sleep 1
+          R_REFS=$(fetch "$BASE/stats/toprefs?limit=5")
 
-          # ---- Top 5 origens (de onde vieram os visitantes) ----
-          REFS=$(curl -s -H "$AUTH" "$BASE/stats/toprefs?limit=5" \
-            | jq -r '.stats[]? | "- " + (if (.name // "") == "" then "(direto)" else .name end) + ": " + (.count|tostring)')
+          # jq com 2>/dev/null + fallback: se a resposta vier ruim, usa 0/vazio
+          # em vez de derrubar o robô (assim você sempre recebe a mensagem).
+          TOTAL=$(echo "$R_TOTAL" | jq -r '.total // 0' 2>/dev/null || echo 0)
+          PIX=$(echo "$R_HITS"   | jq -r '[.hits[]? | select(.path | test("clique-pix")) | .count] | add // 0' 2>/dev/null || echo 0)
+          REFS=$(echo "$R_REFS"  | jq -r '.stats[]? | "- " + (if (.name // "") == "" then "(direto)" else .name end) + ": " + (.count|tostring)' 2>/dev/null || echo "")
+          [ -z "$TOTAL" ] && TOTAL=0
+          [ -z "$PIX" ] && PIX=0
           [ -z "$REFS" ] && REFS="- (sem dados ainda)"
 
           # ---- Monta a mensagem (printf evita espaços indevidos da indentação) ----
