@@ -1,0 +1,50 @@
+name: Relatório semanal no WhatsApp
+
+# Toda segunda-feira às 09:00 (horário de Brasília) envia um resumo das
+# estatísticas da semana no WhatsApp. Também pode ser disparado na mão
+# (aba "Actions" > este workflow > "Run workflow").
+on:
+  schedule:
+    - cron: "0 12 * * 1" # 12:00 UTC = 09:00 no horário de Brasília (segunda)
+  workflow_dispatch:
+
+jobs:
+  relatorio:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coleta dados do GoatCounter e envia no WhatsApp
+        env:
+          GC_TOKEN: ${{ secrets.GOATCOUNTER_TOKEN }}
+          CMB_KEY: ${{ secrets.CALLMEBOT_APIKEY }}
+          PHONE: ${{ secrets.WHATSAPP_PHONE }}
+        run: |
+          set -e
+          BASE="https://machadogamer.goatcounter.com/api/v0"
+          AUTH="Authorization: Bearer $GC_TOKEN"
+
+          # ---- Total de visitas dos últimos 7 dias (padrão da API) ----
+          TOTAL=$(curl -s -H "$AUTH" "$BASE/stats/total" | jq -r '.total // 0')
+
+          # ---- Cliques no botão PIX (evento gravado como "clique-pix") ----
+          PIX=$(curl -s -H "$AUTH" "$BASE/stats/hits?limit=100" \
+            | jq -r '[.hits[]? | select(.path | test("clique-pix")) | .count] | add // 0')
+
+          # ---- Top 5 origens (de onde vieram os visitantes) ----
+          REFS=$(curl -s -H "$AUTH" "$BASE/stats/toprefs?limit=5" \
+            | jq -r '.stats[]? | "- " + (if (.name // "") == "" then "(direto)" else .name end) + ": " + (.count|tostring)')
+          [ -z "$REFS" ] && REFS="- (sem dados ainda)"
+
+          # ---- Monta a mensagem (printf evita espaços indevidos da indentação) ----
+          MSG=$(printf '📊 Machado Gamer - ultimos 7 dias\n\n👁️ Visitas: %s\n💸 Cliques no PIX: %s\n\n🔝 De onde vieram:\n%s\n\nPainel: machadogamer.goatcounter.com' \
+            "$TOTAL" "$PIX" "$REFS")
+
+          echo "----- Prévia da mensagem -----"
+          echo "$MSG"
+          echo "------------------------------"
+
+          # ---- Envia no WhatsApp via CallMeBot ----
+          RESP=$(curl -s -G "https://api.callmebot.com/whatsapp.php" \
+            --data-urlencode "phone=$PHONE" \
+            --data-urlencode "text=$MSG" \
+            --data-urlencode "apikey=$CMB_KEY")
+          echo "Resposta do CallMeBot: $RESP"
