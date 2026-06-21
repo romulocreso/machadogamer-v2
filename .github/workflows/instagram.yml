@@ -24,38 +24,73 @@ jobs:
           set -e
           USUARIO="machadogameroficial"
 
-          # Endpoint público que o próprio site do Instagram usa.
-          # Pode ser bloqueado de vez em quando (IP de servidor); se falhar,
-          # o passo seguinte simplesmente mantém o número que já está no JSON.
+          # Valores atuais do JSON, usados como reserva se algum campo não vier.
+          SEGUINDO=$(jq -r '.following // ""' data/instagram.json)
+          POSTS=$(jq -r '.posts // ""' data/instagram.json)
+          SEGUIDORES=""
+
+          # ---- Método 1: endpoint de API que o próprio site usa ----
+          # (números EXATOS, mas costuma ser barrado em IP de servidor)
           RESP=$(curl -s --max-time 30 \
             -H "x-ig-app-id: 936619743392459" \
             -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
             "https://i.instagram.com/api/v1/users/web_profile_info/?username=$USUARIO")
-
           SEGUIDORES=$(echo "$RESP" | jq -r '.data.user.edge_followed_by.count // empty')
-          SEGUINDO=$(echo "$RESP"   | jq -r '.data.user.edge_follow.count // empty')
-          POSTS=$(echo "$RESP"      | jq -r '.data.user.edge_owner_to_timeline_media.count // empty')
+          A_SEGUINDO=$(echo "$RESP" | jq -r '.data.user.edge_follow.count // empty')
+          A_POSTS=$(echo "$RESP"    | jq -r '.data.user.edge_owner_to_timeline_media.count // empty')
+          [ -n "$A_SEGUINDO" ] && SEGUINDO="$A_SEGUINDO"
+          [ -n "$A_POSTS" ]    && POSTS="$A_POSTS"
 
+          # ---- Método 2: meta-descrição entregue a robôs (Facebook crawler) ----
+          # O Instagram serve uma tag tipo:
+          #   <meta property="og:description" content="29K Followers, 159 Following, 999 Posts - ...">
+          # Esse caminho costuma passar onde a API é bloqueada. Dá o número JÁ
+          # abreviado ("29K"), que é exatamente o formato que mostramos na página.
+          IG_PRONTO=""
           if [ -z "$SEGUIDORES" ]; then
+            HTML=$(curl -s --max-time 30 -A "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)" \
+              "https://www.instagram.com/$USUARIO/")
+            DESC=$(echo "$HTML" | grep -oP '<meta property="og:description" content="\K[^"]+' | head -1)
+            if [ -n "$DESC" ]; then
+              # "29K Followers, 159 Following, 999 Posts"
+              IG_PRONTO=$(echo "$DESC" | grep -oP '^[0-9.,]+[KMB]?(?= Followers)' | head -1)
+              M_SEGUINDO=$(echo "$DESC" | grep -oP '[0-9.,]+(?= Following)' | head -1)
+              M_POSTS=$(echo "$DESC"    | grep -oP '[0-9.,]+(?= Posts)' | head -1)
+              [ -n "$M_SEGUINDO" ] && SEGUINDO="$M_SEGUINDO"
+              [ -n "$M_POSTS" ]    && POSTS="$M_POSTS"
+            fi
+          fi
+
+          # ---- Decide o valor de seguidores a gravar ----
+          if [ -n "$SEGUIDORES" ]; then
+            # veio número exato -> abrevia: 29345 -> "29,3K", 1200000 -> "1,2M"
+            ABREV=$(awk -v n="$SEGUIDORES" 'BEGIN{
+              if (n>=1000000)      { v=n/1000000; s="M" }
+              else if (n>=1000)    { v=n/1000;    s="K" }
+              else                 { printf "%d", n; exit }
+              r=sprintf("%.1f", v); sub(/\.0$/,"",r); sub(/\./,",",r);
+              printf "%s%s", r, s
+            }')
+            DETALHE="$SEGUIDORES exato"
+          elif [ -n "$IG_PRONTO" ]; then
+            # veio já abreviado da meta-tag (ex.: "29K") -> usa direto, trocando . por ,
+            ABREV=$(echo "$IG_PRONTO" | sed 's/\./,/')
+            DETALHE="via meta-tag"
+          else
             echo "::warning::Instagram não retornou o número (bloqueado ou formato mudou). Mantendo valor atual."
             echo "ok=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          # Abrevia o número de seguidores: 29345 -> "29,3K", 1200000 -> "1,2M".
-          ABREV=$(awk -v n="$SEGUIDORES" 'BEGIN{
-            if (n>=1000000)      { v=n/1000000; s="M" }
-            else if (n>=1000)    { v=n/1000;    s="K" }
-            else                 { printf "%d", n; exit }
-            r=sprintf("%.1f", v); sub(/\.0$/,"",r); sub(/\./,",",r);
-            printf "%s%s", r, s
-          }')
+          # Limpa vírgulas de milhar dos campos numéricos (ex.: "1,234" -> "1234")
+          [ -n "$SEGUINDO" ] && SEGUINDO=$(echo "$SEGUINDO" | tr -d '.,')
+          [ -n "$POSTS" ]    && POSTS=$(echo "$POSTS" | tr -d '.,')
 
-          echo "ok=true"                  >> "$GITHUB_OUTPUT"
-          echo "seguidores=$ABREV"        >> "$GITHUB_OUTPUT"
-          echo "seguindo=$SEGUINDO"       >> "$GITHUB_OUTPUT"
-          echo "posts=$POSTS"             >> "$GITHUB_OUTPUT"
-          echo "Lido: $ABREV seguidores ($SEGUIDORES exato)."
+          echo "ok=true"            >> "$GITHUB_OUTPUT"
+          echo "seguidores=$ABREV"  >> "$GITHUB_OUTPUT"
+          echo "seguindo=$SEGUINDO" >> "$GITHUB_OUTPUT"
+          echo "posts=$POSTS"       >> "$GITHUB_OUTPUT"
+          echo "Lido: $ABREV seguidores ($DETALHE)."
 
       - name: Grava data/instagram.json
         if: steps.ig.outputs.ok == 'true'
