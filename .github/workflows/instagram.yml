@@ -1,0 +1,83 @@
+name: Atualiza seguidores do Instagram
+
+# Roda sozinho a cada 6 horas e também pode ser disparado na mão
+# (aba "Actions" do GitHub > este workflow > "Run workflow").
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+# Permite que o robô faça commit do data/instagram.json atualizado.
+permissions:
+  contents: write
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixa o repositório
+        uses: actions/checkout@v4
+
+      - name: Lê o perfil do Instagram
+        id: ig
+        run: |
+          set -e
+          USUARIO="machadogameroficial"
+
+          # Endpoint público que o próprio site do Instagram usa.
+          # Pode ser bloqueado de vez em quando (IP de servidor); se falhar,
+          # o passo seguinte simplesmente mantém o número que já está no JSON.
+          RESP=$(curl -s --max-time 30 \
+            -H "x-ig-app-id: 936619743392459" \
+            -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
+            "https://i.instagram.com/api/v1/users/web_profile_info/?username=$USUARIO")
+
+          SEGUIDORES=$(echo "$RESP" | jq -r '.data.user.edge_followed_by.count // empty')
+          SEGUINDO=$(echo "$RESP"   | jq -r '.data.user.edge_follow.count // empty')
+          POSTS=$(echo "$RESP"      | jq -r '.data.user.edge_owner_to_timeline_media.count // empty')
+
+          if [ -z "$SEGUIDORES" ]; then
+            echo "::warning::Instagram não retornou o número (bloqueado ou formato mudou). Mantendo valor atual."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Abrevia o número de seguidores: 29345 -> "29,3K", 1200000 -> "1,2M".
+          ABREV=$(awk -v n="$SEGUIDORES" 'BEGIN{
+            if (n>=1000000)      { v=n/1000000; s="M" }
+            else if (n>=1000)    { v=n/1000;    s="K" }
+            else                 { printf "%d", n; exit }
+            r=sprintf("%.1f", v); sub(/\.0$/,"",r); sub(/\./,",",r);
+            printf "%s%s", r, s
+          }')
+
+          echo "ok=true"                  >> "$GITHUB_OUTPUT"
+          echo "seguidores=$ABREV"        >> "$GITHUB_OUTPUT"
+          echo "seguindo=$SEGUINDO"       >> "$GITHUB_OUTPUT"
+          echo "posts=$POSTS"             >> "$GITHUB_OUTPUT"
+          echo "Lido: $ABREV seguidores ($SEGUIDORES exato)."
+
+      - name: Grava data/instagram.json
+        if: steps.ig.outputs.ok == 'true'
+        run: |
+          cat > data/instagram.json <<EOF
+          {
+            "followers": "${{ steps.ig.outputs.seguidores }}",
+            "following": "${{ steps.ig.outputs.seguindo }}",
+            "posts": "${{ steps.ig.outputs.posts }}",
+            "updated": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          EOF
+
+      - name: Faz commit se o número mudou
+        if: steps.ig.outputs.ok == 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet data/instagram.json; then
+            echo "Sem mudança — nada a commitar."
+          else
+            git add data/instagram.json
+            git commit -m "Instagram: atualiza seguidores (automático)"
+            git push
+          fi
