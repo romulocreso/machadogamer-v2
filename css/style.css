@@ -130,9 +130,11 @@ a { color: inherit; text-decoration: none; }
 }
 .hero-tagline { color: var(--text-dim); font-size: clamp(1rem, 2.5vw, 1.2rem); max-width: 600px; margin: 18px auto 30px; }
 .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-.hero-pix { margin-top: 16px; display: flex; justify-content: center; }
+.hero-pix { margin-top: 16px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .btn-pix { background: transparent; color: var(--sand); border-color: var(--sand); }
 .btn-pix:hover { background: rgba(202,168,119,.12); border-color: var(--sand); transform: translateY(-2px); }
+.btn-streamlabs { background: transparent; color: var(--sand); border-color: var(--sand); }
+.btn-streamlabs:hover { background: rgba(202,168,119,.12); border-color: var(--sand); transform: translateY(-2px); }
 
 /* ===================== SEÇÕES GERAIS ===================== */
 .section { padding: 70px 0; }
