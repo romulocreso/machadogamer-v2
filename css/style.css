@@ -137,7 +137,7 @@ a { color: inherit; text-decoration: none; }
 .btn-streamlabs:hover { background: rgba(202,168,119,.12); border-color: var(--sand); transform: translateY(-2px); }
 
 /* ===================== SEÇÕES GERAIS ===================== */
-.section { padding: 70px 0; }
+.section { padding: 92px 0; }
 /* Fundo alternado com bordas que dissolvem nas secoes vizinhas (transicao suave) */
 .section-alt {
   background: linear-gradient(
@@ -325,4 +325,105 @@ a { color: inherit; text-decoration: none; }
   .main-nav.open { transform: translateY(0); }
   .main-nav a { width: 100%; padding: 14px 0; border-bottom: 1px solid var(--border); color: var(--text); }
   .main-nav a.btn { margin-top: 12px; justify-content: center; border-bottom: 0; }
+}
+
+/* =====================================================================
+   CAMADA DE UX (scroll) — reveals ao rolar, header reativo, indicador
+   "role para ver mais", parallax sutil e entradas suaves. Inspirada na
+   pega de navegação do GTA VI, mantendo a estética faroeste da marca.
+   ===================================================================== */
+
+/* ---------- Reveal ao rolar (fade + slide-up) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(42px);
+    transition:
+      opacity .85s cubic-bezier(.16, .84, .44, 1),
+      transform .85s cubic-bezier(.16, .84, .44, 1);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible { opacity: 1; transform: none; }
+  /* escalonamento (stagger) para grupos de cards */
+  .reveal[data-delay="1"] { transition-delay: .08s; }
+  .reveal[data-delay="2"] { transition-delay: .16s; }
+  .reveal[data-delay="3"] { transition-delay: .24s; }
+  .reveal[data-delay="4"] { transition-delay: .32s; }
+  .reveal[data-delay="5"] { transition-delay: .40s; }
+  .reveal[data-delay="6"] { transition-delay: .48s; }
+}
+
+/* ---------- Header reativo ao scroll ---------- */
+.site-header {
+  transition: height .35s ease, background .35s ease,
+              box-shadow .35s ease, border-color .35s ease;
+}
+.site-header .nav-wrap { transition: height .35s ease; }
+.site-header.is-scrolled {
+  background: rgba(19, 18, 14, 0.96);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .55), 0 2px 0 rgba(94, 17, 9, .55);
+}
+.site-header.is-scrolled .nav-wrap { height: 58px; }
+.site-header.is-scrolled .brand-logo { height: 38px; }
+.brand-logo { transition: height .35s ease; }
+.main-nav a.btn { transition: transform .25s ease, box-shadow .25s ease, opacity .35s ease; }
+.site-header.is-scrolled .main-nav a.btn { box-shadow: 0 6px 18px var(--accent-glow); }
+
+/* ---------- Indicador "role para ver mais" ---------- */
+.scroll-cue {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin: 34px auto 0;
+  color: var(--text-dim);
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+  transition: opacity .4s ease, transform .4s ease;
+}
+.scroll-cue:hover { color: var(--sand); }
+.scroll-cue-arrow { font-size: 1.6rem; line-height: 1; color: var(--accent); }
+@media (prefers-reduced-motion: no-preference) {
+  .scroll-cue-arrow { animation: cueBounce 1.8s ease-in-out infinite; }
+}
+@keyframes cueBounce {
+  0%, 100% { transform: translateY(0); opacity: .65; }
+  50%      { transform: translateY(7px); opacity: 1; }
+}
+.scroll-cue.is-hidden { opacity: 0; transform: translateY(10px); pointer-events: none; }
+
+/* ---------- Parallax sutil no fundo do hero ---------- */
+.hero-bg { will-change: transform; transition: transform .1s linear; }
+
+/* ---------- Transições mais suaves nos cards ---------- */
+.social-card, .partner-card, .schedule-card, .gallery img {
+  transition: transform .35s cubic-bezier(.16, .84, .44, 1),
+              box-shadow .35s ease, border-color .35s ease;
+}
+
+/* ---------- Seção "Ao vivo" mais compacta (só título + status) ---------- */
+#aovivo { padding: 54px 0; }
+#aovivo .section-head { margin-bottom: 0; }
+@media (max-width: 720px) {
+  .section { padding: 64px 0; }
+  #aovivo { padding: 40px 0; }
+}
+
+/* ---------- Entrada do hero ao carregar a página ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-poster { animation: heroPop 1.1s cubic-bezier(.16, .84, .44, 1) both; }
+  .hero .badge { animation: heroFade .8s ease .15s both; }
+  .hero-tagline { animation: heroFade .8s ease .3s both; }
+  .hero-actions { animation: heroFade .8s ease .45s both; }
+  .hero-pix { animation: heroFade .8s ease .6s both; }
+}
+@keyframes heroPop {
+  from { opacity: 0; transform: translateY(18px) scale(.965); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes heroFade {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
 }
