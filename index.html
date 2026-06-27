@@ -43,12 +43,17 @@
       </button>
 
       <nav class="main-nav" id="mainNav" aria-label="Navegação principal">
-        <a href="#aovivo">Ao vivo</a>
-        <a href="#sobre">Sobre</a>
-        <a href="#agenda">Agenda</a>
-        <a href="#redes">Redes</a>
-        <a href="#parcerias">Parcerias</a>
-        <a class="btn btn-primary btn-sm" href="https://www.twitch.tv/machadogameroficial" target="_blank" rel="noopener">Seguir na Twitch</a>
+        <a href="#aovivo" data-i18n="nav.live">Ao vivo</a>
+        <a href="#sobre" data-i18n="nav.about">Sobre</a>
+        <a href="#agenda" data-i18n="nav.schedule">Agenda</a>
+        <a href="#redes" data-i18n="nav.socials">Redes</a>
+        <a href="#parcerias" data-i18n="nav.partners">Parcerias</a>
+        <a class="btn btn-primary btn-sm" href="https://www.twitch.tv/machadogameroficial" target="_blank" rel="noopener" data-i18n="nav.followTwitch">Seguir na Twitch</a>
+        <div class="lang-switch" role="group" aria-label="Idioma / Language">
+          <button type="button" class="lang-btn is-active" data-lang="pt" aria-pressed="true">PT</button>
+          <span class="lang-sep" aria-hidden="true">|</span>
+          <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+        </div>
       </nav>
     </div>
   </header>
@@ -61,23 +66,17 @@
         <img src="assets/logo-principal.png" alt="Machado Gamer" class="hero-poster" />
       </h1>
       <!-- TROCAR: tagline/bio curta abaixo -->
-      <p class="hero-tagline">Reacts, gameplays e muita zoeira ao vivo. Chega mais e cola na live! 🎮🪓</p>
+      <p class="hero-tagline" data-i18n="hero.tagline">Reacts, gameplays e muita zoeira ao vivo. Chega mais e cola na live! 🎮🪓</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="https://www.twitch.tv/machadogameroficial" target="_blank" rel="noopener">▶ Assistir ao vivo</a>
-        <a class="btn btn-ghost" href="https://www.instagram.com/machadogameroficial/" target="_blank" rel="noopener">Ver no Instagram</a>
+        <a class="btn btn-primary" href="https://www.twitch.tv/machadogameroficial" target="_blank" rel="noopener" data-i18n="hero.watchLive">▶ Assistir ao vivo</a>
+        <a class="btn btn-ghost" href="https://www.instagram.com/machadogameroficial/" target="_blank" rel="noopener" data-i18n="hero.instagram">Ver no Instagram</a>
       </div>
       <div class="hero-pix">
         <a class="btn btn-pix" href="https://midfielder.tv.br/machadogamer92" target="_blank" rel="noopener"
-           data-goatcounter-click="clique-pix" data-goatcounter-title="Clique no botão PIX">💸 Apoie no Live PIX</a>
+           data-goatcounter-click="clique-pix" data-goatcounter-title="Clique no botão PIX" data-i18n="hero.pix">💸 Apoie no Live PIX</a>
         <a class="btn btn-streamlabs" href="https://streamlabs.com/machadogameroficial/tip" target="_blank" rel="noopener"
-           data-goatcounter-click="clique-streamlabs" data-goatcounter-title="Clique no botão Streamlabs">🎁 Apoie no PayPal</a>
+           data-goatcounter-click="clique-streamlabs" data-goatcounter-title="Clique no botão Streamlabs" data-i18n="hero.paypal">🎁 Apoie no PayPal</a>
       </div>
-
-      <!-- Indicador "role para ver mais" -->
-      <a class="scroll-cue" href="#aovivo" aria-label="Rolar para ver mais">
-        <span class="scroll-cue-text">Role para ver mais</span>
-        <span class="scroll-cue-arrow" aria-hidden="true">⌄</span>
-      </a>
     </div>
   </section>
 
@@ -88,7 +87,7 @@
         <h2 class="section-title live-title">
           <span class="live-title-inner">
             <span id="liveDot" class="live-dot is-checking" data-channel="machadogameroficial" title="Verificando status…"></span>
-            Transmissão ao vivo
+            <span data-i18n="live.title">Transmissão ao vivo</span>
           </span>
         </h2>
         <p class="section-sub" id="liveMsg">Verificando se a live está rolando…</p>
@@ -100,7 +99,7 @@
   <section class="section section-alt" id="sobre">
     <div class="container">
       <header class="section-head">
-        <h2 class="section-title">Sobre o canal</h2>
+        <h2 class="section-title" data-i18n="about.title">Sobre o canal</h2>
       </header>
 
       <div class="about-grid">
@@ -109,19 +108,19 @@
         </div>
         <div class="about-text">
           <!-- TROCAR: texto de apresentação abaixo -->
-          <p>E aí, galera! Eu sou o <strong>Machado Gamer</strong>, criador de conteúdo focado em reacts, gameplays e diversão ao vivo. Aqui o clima é leve, com muita interação com a galera do chat.</p>
-          <p>Cola nas lives, deixa o follow e faz parte dessa comunidade! 🪓</p>
+          <p data-i18n-html="about.p1">E aí, galera! Eu sou o <strong>Machado Gamer</strong>, criador de conteúdo focado em reacts, gameplays e diversão ao vivo. Aqui o clima é leve, com muita interação com a galera do chat.</p>
+          <p data-i18n="about.p2">Cola nas lives, deixa o follow e faz parte dessa comunidade! 🪓</p>
           <ul class="about-stats">
             <li>
               <strong id="twitchFollowers" data-channel="machadogameroficial" title="Atualizado automaticamente">…</strong>
-              <span>📺 Seguidores Twitch</span>
+              <span data-i18n="about.statTwitch">📺 Seguidores Twitch</span>
             </li>
             <li>
               <!-- Atualizado automaticamente pelo GitHub Action (data/instagram.json) -->
               <strong id="igFollowers" title="Atualizado automaticamente">29K</strong>
-              <span>📸 Seguidores Instagram</span>
+              <span data-i18n="about.statInsta">📸 Seguidores Instagram</span>
             </li>
-            <li><strong>🎮</strong><span>Vários games</span></li>
+            <li><strong>🎮</strong><span data-i18n="about.statGames">Vários games</span></li>
           </ul>
         </div>
       </div>
@@ -132,23 +131,23 @@
   <section class="section" id="agenda">
     <div class="container">
       <header class="section-head">
-        <h2 class="section-title">🗓️ Agenda de lives</h2>
+        <h2 class="section-title" data-i18n="schedule.title">🗓️ Agenda de lives</h2>
       </header>
 
       <!-- TROCAR: dias e horários reais abaixo -->
       <div class="schedule">
         <div class="schedule-card card">
-          <span class="schedule-day">Segunda a Sexta</span>
-          <span class="schedule-time">06h às 08h</span>
-          <span class="schedule-game">Live da manhã</span>
+          <span class="schedule-day" data-i18n="schedule.weekdays">Segunda a Sexta</span>
+          <span class="schedule-time" data-i18n="schedule.time1">06h às 08h</span>
+          <span class="schedule-game" data-i18n="schedule.morning">Live da manhã</span>
         </div>
         <div class="schedule-card card">
-          <span class="schedule-day">Segunda a Sexta</span>
-          <span class="schedule-time">19h às 21h</span>
-          <span class="schedule-game">Live da noite</span>
+          <span class="schedule-day" data-i18n="schedule.weekdays">Segunda a Sexta</span>
+          <span class="schedule-time" data-i18n="schedule.time2">19h às 21h</span>
+          <span class="schedule-game" data-i18n="schedule.night">Live da noite</span>
         </div>
       </div>
-      <p class="schedule-note">
+      <p class="schedule-note" data-i18n-html="schedule.note">
         A programação pode variar.<br />
         Confirme em nossas redes sociais.<br />
         Horário de Brasília.
@@ -160,8 +159,8 @@
   <section class="section section-alt" id="redes">
     <div class="container">
       <header class="section-head">
-        <h2 class="section-title">Redes sociais</h2>
-        <p class="section-sub">Segue em todas pra não perder nada!</p>
+        <h2 class="section-title" data-i18n="socials.title">Redes sociais</h2>
+        <p class="section-sub" data-i18n="socials.sub">Segue em todas pra não perder nada!</p>
       </header>
 
       <div class="socials">
@@ -191,14 +190,14 @@
             <svg viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.892c0 2.096.549 4.142 1.595 5.945L0 24l6.305-1.654a11.962 11.962 0 005.683 1.448h.005c6.582 0 11.94-5.335 11.943-11.893a11.821 11.821 0 00-3.467-8.418"/></svg>
           </span>
           <span class="social-name">WhatsApp</span>
-          <span class="social-handle">Entrar no grupo</span>
+          <span class="social-handle" data-i18n="socials.joinGroup">Entrar no grupo</span>
         </a>
         <a class="social-card discord" href="https://discord.gg/9yGpAKvhS" target="_blank" rel="noopener">
           <span class="social-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z"/></svg>
           </span>
           <span class="social-name">Discord</span>
-          <span class="social-handle">Entrar no servidor</span>
+          <span class="social-handle" data-i18n="socials.joinServer">Entrar no servidor</span>
         </a>
         <a class="social-card youtube" href="https://www.youtube.com/@Machadogameroficial" target="_blank" rel="noopener">
           <span class="social-icon" aria-hidden="true">
@@ -228,7 +227,7 @@
             <svg viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z"/></svg>
           </span>
           <span class="social-name">Discord</span>
-          <span class="social-handle">Entrar no servidor</span>
+          <span class="social-handle" data-i18n="socials.joinServer">Entrar no servidor</span>
         </a>
         -->
       </div>
@@ -239,8 +238,8 @@
   <section class="section" id="parcerias">
     <div class="container">
       <header class="section-head">
-        <h2 class="section-title">🤝 Parcerias</h2>
-        <p class="section-sub">Quem caminha junto com a gente!</p>
+        <h2 class="section-title" data-i18n="partners.title">🤝 Parcerias</h2>
+        <p class="section-sub" data-i18n="partners.sub">Quem caminha junto com a gente!</p>
       </header>
 
       <div class="partners">
@@ -249,7 +248,7 @@
             <img src="assets/parceiro-emersongames.png" alt="Emerson Games" loading="lazy" />
           </span>
           <span class="partner-name">Emerson Games</span>
-          <span class="partner-desc">Jogos em mídia digital há quase 10 anos</span>
+          <span class="partner-desc" data-i18n="partners.emersonDesc">Jogos em mídia digital há quase 10 anos</span>
         </a>
       </div>
     </div>
@@ -259,11 +258,13 @@
   <footer class="site-footer">
     <div class="container footer-wrap">
       <img src="assets/logo-horizontal.png" alt="Machado Gamer" class="footer-logo" />
-      <p>&copy; <span id="ano"></span> Machado Gamer. Todos os direitos reservados.</p>
-      <p class="footer-credits">Feito com 🤠 para a comunidade.</p>
+      <p>&copy; <span id="ano"></span> Machado Gamer. <span data-i18n="footer.rights">Todos os direitos reservados.</span></p>
+      <p class="footer-credits" data-i18n="footer.credits">Feito com 🤠 para a comunidade.</p>
     </div>
   </footer>
 
+  <!-- i18n (PT | EN) deve carregar antes do main.js para as mensagens da live -->
+  <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

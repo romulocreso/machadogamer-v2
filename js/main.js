@@ -41,22 +41,38 @@ const liveDot = document.getElementById('liveDot');
 if (liveDot) {
   const canal = liveDot.dataset.channel;
   const liveMsg = document.getElementById('liveMsg');
-  const setStatus = (online) => {
+  let lastOnline = null; // null = ainda verificando
+
+  // Lê a tradução atual (PT/EN) se o i18n estiver carregado; senão, fallback PT.
+  const tr = (key, fallback) => (window.MGI18n ? window.MGI18n.t(key) : fallback);
+
+  const render = () => {
+    if (lastOnline === null) {
+      if (liveMsg) liveMsg.textContent = tr('live.checking', 'Verificando se a live está rolando…');
+      return;
+    }
     liveDot.classList.remove('is-checking', 'is-online', 'is-offline');
-    liveDot.classList.add(online ? 'is-online' : 'is-offline');
-    liveDot.title = online ? 'AO VIVO agora' : 'Offline';
+    liveDot.classList.add(lastOnline ? 'is-online' : 'is-offline');
+    liveDot.title = lastOnline ? tr('live.titleOnline', 'AO VIVO agora') : tr('live.titleOffline', 'Offline');
     if (liveMsg) {
-      liveMsg.textContent = online
-        ? '🎮 Tô AO VIVO agora! Cola na live e vem trocar ideia no chat!'
-        : 'No momento estamos offline. Ative as notificações na Twitch e não perca a próxima live!';
+      liveMsg.textContent = lastOnline
+        ? tr('live.online', '🎮 Tô AO VIVO agora! Cola na live e vem trocar ideia no chat!')
+        : tr('live.offline', 'No momento estamos offline. Ative as notificações na Twitch e não perca a próxima live!');
     }
   };
+
+  const setStatus = (online) => { lastOnline = online; render(); };
   const checkLive = () => {
     fetch(`https://decapi.me/twitch/uptime/${canal}`, { cache: 'no-store' })
       .then((r) => r.text())
       .then((txt) => setStatus(!/offline/i.test(txt)))
       .catch(() => setStatus(false));
   };
+
+  // Reaplica a mensagem no idioma novo quando o usuário troca PT/EN.
+  document.addEventListener('mg:langchange', render);
+
+  render();     // mostra "verificando…" já no idioma certo
   checkLive();
   // Reverifica a cada 60s para refletir mudanças sem recarregar a página.
   setInterval(checkLive, 60000);
@@ -114,14 +130,12 @@ if (igEl) {
 
   // Header reativo + indicador de scroll + parallax sutil no hero.
   const header = document.querySelector('.site-header');
-  const scrollCue = document.querySelector('.scroll-cue');
   const heroBg = document.querySelector('.hero-bg');
 
   let ticking = false;
   const onScroll = () => {
     const y = window.scrollY || window.pageYOffset;
     if (header) header.classList.toggle('is-scrolled', y > 40);
-    if (scrollCue) scrollCue.classList.toggle('is-hidden', y > 60);
     if (heroBg && !reduceMotion && y < window.innerHeight) {
       heroBg.style.transform = 'translateY(' + (y * 0.18).toFixed(1) + 'px)';
     }
