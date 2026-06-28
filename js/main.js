@@ -181,7 +181,12 @@ if (igEl) {
   // Esconde a tela de carregamento quando tudo terminar de carregar.
   const loader = document.getElementById('loader');
   if (loader) {
-    const hideLoader = () => loader.classList.add('is-hidden');
+    const MIN_VISIBLE = 900; // ms — tempo mínimo na tela p/ não "piscar"
+    const start = performance.now();
+    const hideLoader = () => {
+      const wait = Math.max(0, MIN_VISIBLE - (performance.now() - start));
+      setTimeout(() => loader.classList.add('is-hidden'), wait);
+    };
     if (document.readyState === 'complete') {
       hideLoader();
     } else {
