@@ -28,6 +28,11 @@
 </head>
 <body>
 
+  <!-- Tela de carregamento (fade da marca enquanto os assets carregam) -->
+  <div id="loader" class="loader">
+    <img src="assets/logo-horizontal.png" alt="" class="loader-logo" />
+  </div>
+
   <!-- Âncora do topo (fora do header sticky, para o scroll funcionar certo) -->
   <span id="topo" aria-hidden="true"></span>
 
@@ -59,6 +64,9 @@
   </header>
 
   <!-- ===================== HERO ===================== -->
+  <!-- .hero-pin: dá altura extra de rolagem para o hero ficar "pinado"
+       (sticky) enquanto o pôster recua/desvanece — estilo GTA VI. -->
+  <div class="hero-pin">
   <section class="hero">
     <div class="hero-bg" aria-hidden="true"></div>
     <div class="container hero-content">
@@ -79,6 +87,7 @@
       </div>
     </div>
   </section>
+  </div><!-- /.hero-pin -->
 
   <!-- ===================== STATUS AO VIVO ===================== -->
   <section class="section" id="aovivo">
@@ -262,6 +271,10 @@
       <p class="footer-credits" data-i18n="footer.credits">Feito com 🤠 para a comunidade.</p>
     </div>
   </footer>
+
+  <!-- Lenis: scroll suave com inércia (sensação cinematográfica, estilo GTA VI).
+       Carrega antes do main.js, que o inicializa se prefers-reduced-motion não estiver ativo. -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
 
   <!-- i18n (PT | EN) deve carregar antes do main.js para as mensagens da live -->
   <script src="js/i18n.js"></script>

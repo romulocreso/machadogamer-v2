@@ -128,16 +128,33 @@ if (igEl) {
     revealEls.forEach((el) => io.observe(el));
   }
 
-  // Header reativo + indicador de scroll + parallax sutil no hero.
+  // Header reativo + parallax sutil no hero + hero "pinado" (estilo GTA VI).
   const header = document.querySelector('.site-header');
   const heroBg = document.querySelector('.hero-bg');
+  const heroPin = document.querySelector('.hero-pin');
+  const heroContent = document.querySelector('.hero-content');
 
   let ticking = false;
   const onScroll = () => {
     const y = window.scrollY || window.pageYOffset;
+    const vh = window.innerHeight;
+
+    // Header ganha sombra/fundo sólido e revela o CTA após sair do topo.
     if (header) header.classList.toggle('is-scrolled', y > 40);
-    if (heroBg && !reduceMotion && y < window.innerHeight) {
-      heroBg.style.transform = 'translateY(' + (y * 0.18).toFixed(1) + 'px)';
+
+    if (!reduceMotion) {
+      // Parallax sutil no fundo do hero.
+      if (heroBg && y < vh) {
+        heroBg.style.transform = 'translateY(' + (y * 0.18).toFixed(1) + 'px)';
+      }
+      // Hero cinematográfico: desvanece e recua suavemente enquanto sai da tela
+      // (ao longo de ~60% de um viewport de rolagem). Sem vão vazio depois.
+      if (heroContent && y < vh) {
+        const p = Math.min(1, Math.max(0, y / (vh * 0.6))); // progresso 0 → 1
+        heroContent.style.opacity = String(1 - p);
+        heroContent.style.transform =
+          'translateY(' + (-p * 50).toFixed(1) + 'px) scale(' + (1 - p * 0.06).toFixed(3) + ')';
+      }
     }
     ticking = false;
   };
@@ -146,5 +163,31 @@ if (igEl) {
     if (!ticking) { window.requestAnimationFrame(onScroll); ticking = true; }
   }, { passive: true });
 
+  // Lenis: scroll suavizado com inércia. Só ativa se o usuário não pediu
+  // movimento reduzido e a lib carregou. Mantém o window.scroll sincronizado.
+  if (!reduceMotion && typeof Lenis !== 'undefined') {
+    const lenis = new Lenis({
+      lerp: 0.12,            // assenta um pouco mais rápido (menos "deriva")
+      smoothWheel: true,
+      wheelMultiplier: 0.8,  // cada giro da roda anda menos → menos overshoot
+    });
+    lenis.on('scroll', onScroll);
+    const raf = (time) => { lenis.raf(time); requestAnimationFrame(raf); };
+    requestAnimationFrame(raf);
+  }
+
   onScroll();
+
+  // Esconde a tela de carregamento quando tudo terminar de carregar.
+  const loader = document.getElementById('loader');
+  if (loader) {
+    const hideLoader = () => loader.classList.add('is-hidden');
+    if (document.readyState === 'complete') {
+      hideLoader();
+    } else {
+      window.addEventListener('load', hideLoader);
+      // Rede de segurança: nunca deixa o loader preso na tela.
+      setTimeout(hideLoader, 3500);
+    }
+  }
 })();

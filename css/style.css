@@ -29,7 +29,9 @@ body {
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
-  overflow-x: hidden;
+  /* "clip" evita rolagem horizontal sem criar um contexto de scroll
+     (ao contrário de "hidden"), o que manteria o position: sticky do hero. */
+  overflow-x: clip;
   position: relative;
 }
 
@@ -428,4 +430,80 @@ a { color: inherit; text-decoration: none; }
 
 @media (max-width: 720px) {
   .lang-switch { width: 100%; justify-content: center; padding: 14px 0 0; }
+}
+
+/* =====================================================================
+   CAMADA DE UX 2 — Lenis (scroll suave), hero pinado, CTA contextual,
+   painéis "showcase" full-bleed e tela de carregamento da marca.
+   ===================================================================== */
+
+/* ---------- Tela de carregamento (fade da marca) ---------- */
+.loader {
+  position: fixed; inset: 0; z-index: 10000;
+  display: flex; align-items: center; justify-content: center;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(164, 39, 26, 0.35), transparent 60%),
+    var(--bg);
+  transition: opacity .6s ease, visibility .6s ease;
+}
+.loader-logo {
+  height: 64px; width: auto;
+  animation: loaderPulse 1.4s ease-in-out infinite;
+  filter: drop-shadow(0 10px 26px rgba(0, 0, 0, .6));
+}
+.loader.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+@keyframes loaderPulse {
+  0%, 100% { opacity: .55; transform: scale(.98); }
+  50%      { opacity: 1;   transform: scale(1.02); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loader-logo { animation: none; }
+}
+
+/* ---------- Hero cinematográfico (estilo GTA VI) ---------- */
+/* O hero ocupa a tela inteira e DESVANECE enquanto sai naturalmente com o
+   scroll (sem "pin" preso, que deixava um vão vazio antes do conteúdo). */
+.hero-pin { position: relative; }
+.hero-content { will-change: opacity, transform; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding-top: 0; padding-bottom: 0;
+  }
+  .hero .container { width: 100%; }
+  /* Pôster respira um pouco menos para caber com o texto na tela cheia. */
+  @media (min-width: 1180px) {
+    .hero-poster { height: min(620px, 68vh); }
+  }
+}
+
+/* ---------- CTA contextual no header (aparece após sair do topo) ---------- */
+/* No desktop, o botão "Seguir na Twitch" só surge depois de rolar — deixa o
+   topo limpo, como o "Reserve agora" da Rockstar. No mobile fica no menu. */
+@media (min-width: 721px) {
+  .main-nav a.btn {
+    opacity: 0; transform: translateY(-8px);
+    pointer-events: none;
+  }
+  .site-header.is-scrolled .main-nav a.btn {
+    opacity: 1; transform: none;
+    pointer-events: auto;
+  }
+}
+
+/* ---------- Painéis "showcase" full-bleed nas seções alternadas ---------- */
+/* O conteúdo das seções escuras vira um painel arredondado e elevado,
+   reforçando o ar de "vitrine" das páginas da Rockstar. */
+.section-alt > .container {
+  background: linear-gradient(180deg, var(--surface), var(--bg-alt));
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding-top: 56px;
+  padding-bottom: 56px;
+  box-shadow: var(--shadow);
+}
+@media (max-width: 720px) {
+  .section-alt > .container { border-radius: 16px; padding-left: 16px; padding-right: 16px; }
 }
