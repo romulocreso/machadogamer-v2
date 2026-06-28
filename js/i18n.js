@@ -36,7 +36,6 @@
       'about.p2': 'Cola nas lives, deixa o follow e faz parte dessa comunidade! 🪓',
       'about.statTwitch': '📺 Seguidores Twitch',
       'about.statInsta': '📸 Seguidores Instagram',
-      'about.statGames': 'Vários games',
 
       'schedule.title': '🗓️ Agenda de lives',
       'schedule.weekdays': 'Segunda a Sexta',
@@ -87,7 +86,6 @@
       'about.p2': 'Join the streams, hit follow and become part of this community! 🪓',
       'about.statTwitch': '📺 Twitch followers',
       'about.statInsta': '📸 Instagram followers',
-      'about.statGames': 'Various games',
 
       'schedule.title': '🗓️ Stream schedule',
       'schedule.weekdays': 'Monday to Friday',
