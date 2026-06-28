@@ -227,8 +227,29 @@ a { color: inherit; text-decoration: none; }
 
 /* ===================== SOBRE + GALERIA ===================== */
 .about-grid { display: grid; grid-template-columns: 320px 1fr; gap: 40px; align-items: center; }
+/* Moldura "medalhão" faroeste: aro em areia/dourado com fio vermelho da marca
+   e brilho sutil. A moldura fica no contêiner (a foto tem clip-path, que
+   recortaria uma borda aplicada nela própria). */
+.about-media {
+  width: 100%;
+  max-width: 320px;
+  margin-inline: auto;
+  aspect-ratio: 1;
+  padding: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, var(--sand), var(--aged) 72%);
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.55),
+    0 0 0 1px var(--accent-deep),
+    0 0 24px var(--accent-glow);
+}
 /* clip-path corta a franja branca que vem embutida na borda do PNG. */
-.about-photo { width: 100%; border-radius: 50%; clip-path: circle(48.5% at 50% 50%); aspect-ratio: 1; object-fit: cover; box-shadow: var(--shadow); }
+.about-photo {
+  width: 100%; aspect-ratio: 1;
+  border-radius: 50%;
+  clip-path: circle(48.5% at 50% 50%);
+  object-fit: cover; display: block;
+}
 .about-text p { color: var(--text-dim); margin-bottom: 14px; }
 .about-text strong { color: var(--text); }
 .about-stats { list-style: none; display: flex; gap: 28px; margin-top: 22px; flex-wrap: wrap; }
