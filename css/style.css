@@ -235,13 +235,13 @@ a { color: inherit; text-decoration: none; }
   max-width: 320px;
   margin-inline: auto;
   aspect-ratio: 1;
-  padding: 6px;
+  padding: 2px;
   border-radius: 50%;
   background: radial-gradient(circle at 32% 28%, var(--sand), var(--aged) 72%);
   box-shadow:
     0 12px 30px rgba(0, 0, 0, 0.55),
     0 0 0 1px var(--accent-deep),
-    0 0 24px var(--accent-glow);
+    0 0 18px var(--accent-glow);
 }
 /* clip-path corta a franja branca que vem embutida na borda do PNG. */
 .about-photo {
@@ -250,9 +250,10 @@ a { color: inherit; text-decoration: none; }
   clip-path: circle(48.5% at 50% 50%);
   object-fit: cover; display: block;
 }
+.about-text { text-align: center; }
 .about-text p { color: var(--text-dim); margin-bottom: 14px; }
 .about-text strong { color: var(--text); }
-.about-stats { list-style: none; display: flex; gap: 28px; margin-top: 22px; flex-wrap: wrap; }
+.about-stats { list-style: none; display: flex; gap: 28px; margin-top: 22px; flex-wrap: wrap; justify-content: center; }
 .about-stats li { display: flex; flex-direction: column; }
 .about-stats strong { font-family: 'Rye', serif; font-size: 1.5rem; color: var(--sand); }
 .about-stats span { font-size: 0.85rem; color: var(--text-dim); }
