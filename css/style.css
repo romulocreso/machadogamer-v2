@@ -300,6 +300,20 @@ a { color: inherit; text-decoration: none; }
 .social-card.whatsapp:hover { border-color: #25d366; box-shadow: 0 10px 26px rgba(37,211,102,.30); }
 .social-card.midfielder:hover { border-color: var(--accent); box-shadow: 0 10px 26px var(--accent-glow); }
 
+/* Efeito "janela": cada card revela o pedaço da paisagem do painel que está
+   exatamente atrás dele. O fundo transparente deixa a imagem do container
+   aparecer já no recorte correto (alinhado com o fundo), e um leve véu por
+   cima — mais forte embaixo, onde fica o texto — mantém tudo legível.
+   No hover o véu clareia, "abrindo" mais a cena. */
+#redes .social-card {
+  background: linear-gradient(180deg, rgba(19, 18, 14, 0.18), rgba(19, 18, 14, 0.48));
+}
+#redes .social-card:hover {
+  background: linear-gradient(180deg, rgba(19, 18, 14, 0.06), rgba(19, 18, 14, 0.30));
+}
+#redes .social-name,
+#redes .social-handle { text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9); }
+
 /* ===================== PARCERIAS ===================== */
 .partners { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; max-width: 520px; margin: 0 auto; }
 .partner-card {
@@ -529,4 +543,33 @@ a { color: inherit; text-decoration: none; }
 }
 @media (max-width: 720px) {
   .section-alt > .container { border-radius: 16px; padding-left: 16px; padding-right: 16px; }
+}
+
+/* ---------- Cenários faroeste DENTRO dos cards "Sobre" e "Redes" ---------- */
+/* O painel de cada seção recebe uma paisagem de deserto ao entardecer como
+   fundo. Um véu escuro por cima garante o contraste do texto que fica sobre
+   a imagem. */
+#sobre > .container,
+#redes > .container {
+  background-color: var(--bg-alt);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border-color: rgba(92, 59, 32, 0.7);
+}
+#sobre > .container {
+  background-image:
+    linear-gradient(180deg,
+      rgba(19, 18, 14, 0.82) 0%,
+      rgba(19, 18, 14, 0.62) 50%,
+      rgba(19, 18, 14, 0.85) 100%),
+    url("../assets/background-i.webp");
+}
+#redes > .container {
+  background-image:
+    linear-gradient(180deg,
+      rgba(19, 18, 14, 0.82) 0%,
+      rgba(19, 18, 14, 0.62) 50%,
+      rgba(19, 18, 14, 0.85) 100%),
+    url("../assets/background-ii.webp");
 }
