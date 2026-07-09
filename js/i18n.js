@@ -53,6 +53,7 @@
       'partners.title': '🤝 Parcerias',
       'partners.sub': 'Quem caminha junto com a gente!',
       'partners.emersonDesc': 'Jogos em mídia digital há quase 10 anos',
+      'partners.idealizeDesc': 'Impressões e projetos 3D sob medida',
 
       'footer.rights': 'Todos os direitos reservados.',
       'footer.credits': 'Feito com 🤠 para a comunidade.'
@@ -103,6 +104,7 @@
       'partners.title': '🤝 Partners',
       'partners.sub': 'Those who walk alongside us!',
       'partners.emersonDesc': 'Digital media games for almost 10 years',
+      'partners.idealizeDesc': 'Custom 3D prints and projects',
 
       'footer.rights': 'All rights reserved.',
       'footer.credits': 'Made with 🤠 for the community.'
