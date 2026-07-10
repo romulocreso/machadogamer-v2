@@ -50,6 +50,12 @@
       'socials.joinGroup': 'Entrar no grupo',
       'socials.joinServer': 'Entrar no servidor',
 
+      'picks.title': '🛒 Minhas indicações',
+      'picks.sub': 'Produtos que eu uso e recomendo',
+      'picks.name': 'Vitrine de recomendações',
+      'picks.desc': 'Games, acessórios e itens do meu setup — com curadoria minha, direto no Mercado Livre.',
+      'picks.cta': 'Ver vitrine no Mercado Livre →',
+
       'partners.title': '🤝 Parcerias',
       'partners.sub': 'Quem caminha junto com a gente!',
       'partners.emersonDesc': 'Jogos em mídia digital há quase 10 anos',
@@ -100,6 +106,12 @@
       'socials.sub': "Follow on all of them so you don't miss a thing!",
       'socials.joinGroup': 'Join the group',
       'socials.joinServer': 'Join the server',
+
+      'picks.title': '🛒 My picks',
+      'picks.sub': 'Products I use and recommend',
+      'picks.name': 'Recommendations storefront',
+      'picks.desc': 'Games, accessories and gear from my setup — hand-picked by me, right on Mercado Livre.',
+      'picks.cta': 'See my storefront on Mercado Livre →',
 
       'partners.title': '🤝 Partners',
       'partners.sub': 'Those who walk alongside us!',

@@ -314,6 +314,26 @@ a { color: inherit; text-decoration: none; }
 #redes .social-name,
 #redes .social-handle { text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9); }
 
+/* ===================== MINHAS INDICAÇÕES (MERCADO LIVRE) ===================== */
+.picks { display: flex; justify-content: center; }
+.pick-card {
+  background: linear-gradient(180deg, var(--surface), var(--bg-alt));
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 32px 28px; max-width: 420px; width: 100%;
+  display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center;
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+.pick-card:hover { transform: translateY(-5px); border-color: #ffe600; box-shadow: 0 10px 26px rgba(255,230,0,.28); }
+.pick-badge {
+  background: #ffe600; color: #2d3277;
+  font-weight: 700; font-size: 0.78rem; letter-spacing: .3px;
+  padding: 5px 14px; border-radius: 999px;
+}
+.pick-name { font-weight: 700; font-size: 1.15rem; color: var(--text); }
+.pick-desc { color: var(--text-dim); font-size: 0.9rem; max-width: 32ch; }
+.btn-meli { background: #ffe600; color: #2d3277; border-color: #e6cf00; margin-top: 6px; box-shadow: 0 6px 18px rgba(255,230,0,.25); }
+.pick-card:hover .btn-meli { background: #ffed4a; transform: translateY(-2px); }
+
 /* ===================== PARCERIAS ===================== */
 .partners { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; max-width: 520px; margin: 0 auto; }
 .partner-card {
@@ -414,7 +434,7 @@ a { color: inherit; text-decoration: none; }
 .hero-bg { will-change: transform; transition: transform .1s linear; }
 
 /* ---------- Transições mais suaves nos cards ---------- */
-.social-card, .partner-card, .schedule-card, .gallery img {
+.social-card, .partner-card, .pick-card, .schedule-card, .gallery img {
   transition: transform .35s cubic-bezier(.16, .84, .44, 1),
               box-shadow .35s ease, border-color .35s ease;
 }
