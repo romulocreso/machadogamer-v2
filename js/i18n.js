@@ -21,8 +21,8 @@
       'hero.tagline': 'Reacts, gameplays e muita zoeira ao vivo. As luzes acendem, o chat esquenta — cola na live! 🎮🌴',
       'hero.watchLive': '▶ Assistir ao vivo',
       'hero.instagram': 'Ver no Instagram',
-      'hero.pix': '💸 Apoie no Live PIX',
-      'hero.paypal': '🎁 Apoie no PayPal',
+      'hero.pix': 'Apoie no Live PIX',
+      'hero.paypal': 'Apoie no PayPal',
 
       'live.title': 'Transmissão ao vivo',
       'live.checking': 'Verificando se a live está rolando…',
@@ -78,8 +78,8 @@
       'hero.tagline': 'Reacts, gameplays and tons of fun live. Lights on, chat heating up — jump in! 🎮🌴',
       'hero.watchLive': '▶ Watch live',
       'hero.instagram': 'See on Instagram',
-      'hero.pix': '💸 Support via Live PIX',
-      'hero.paypal': '🎁 Support via PayPal',
+      'hero.pix': 'Support via Live PIX',
+      'hero.paypal': 'Support via PayPal',
 
       'live.title': 'Live stream',
       'live.checking': 'Checking if the stream is live…',
