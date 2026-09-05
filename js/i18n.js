@@ -18,7 +18,7 @@
       'nav.partners': 'Parcerias',
       'nav.followTwitch': 'Seguir na Twitch',
 
-      'hero.tagline': 'Reacts, gameplays e muita zoeira ao vivo. Chega mais e cola na live! 🎮🪓',
+      'hero.tagline': 'Reacts, gameplays e muita zoeira ao vivo. As luzes acendem, o chat esquenta — cola na live! 🎮🌴',
       'hero.watchLive': '▶ Assistir ao vivo',
       'hero.instagram': 'Ver no Instagram',
       'hero.pix': '💸 Apoie no Live PIX',
@@ -26,23 +26,23 @@
 
       'live.title': 'Transmissão ao vivo',
       'live.checking': 'Verificando se a live está rolando…',
-      'live.online': '🎮 Tô AO VIVO agora! Cola na live e vem trocar ideia no chat!',
-      'live.offline': 'No momento estamos offline. Ative as notificações na Twitch e não perca a próxima live!',
+      'live.online': '🎮 Tô AO VIVO agora! As luzes acesas — cola na live e vem trocar ideia no chat!',
+      'live.offline': 'As luzes estão apagadas por enquanto. Ative as notificações na Twitch e não perca a próxima live!',
       'live.titleOnline': 'AO VIVO agora',
       'live.titleOffline': 'Offline',
 
       'about.title': 'Sobre o canal',
-      'about.p1': 'E aí, galera! Eu sou o <strong>Machado Gamer</strong>, criador de conteúdo focado em reacts, gameplays e diversão ao vivo. Aqui o clima é leve, com muita interação com a galera do chat.',
-      'about.p2': 'Cola nas lives, deixa o follow e faz parte dessa comunidade! 🪓',
+      'about.p1': 'E aí, galera! Eu sou o <strong>Machado Gamer</strong>, criador de conteúdo focado em reacts, gameplays e diversão ao vivo. Aqui o clima é neon: papo solto, chat na área e aquela vibe de fim de tarde na orla.',
+      'about.p2': 'Cola nas lives, deixa o follow e entra pro bonde! 🌴',
       'about.statTwitch': '📺 Seguidores Twitch',
       'about.statInsta': '📸 Seguidores Instagram',
 
-      'schedule.title': '🗓️ Agenda de lives',
+      'schedule.title': '🌆 Agenda de lives',
       'schedule.weekdays': 'Segunda a Sexta',
       'schedule.time1': '06h às 08h',
       'schedule.time2': '19h às 21h',
-      'schedule.morning': 'Live da manhã',
-      'schedule.night': 'Live da noite',
+      'schedule.morning': 'Sessão da manhã',
+      'schedule.night': 'Sessão da noite',
       'schedule.note': 'A programação pode variar.<br />Confirme em nossas redes sociais.<br />Horário de Brasília.',
 
       'socials.title': 'Redes sociais',
@@ -57,12 +57,12 @@
       'picks.cta': 'Ver vitrine no Mercado Livre →',
 
       'partners.title': '🤝 Parcerias',
-      'partners.sub': 'Quem caminha junto com a gente!',
+      'partners.sub': 'Quem tá no corre junto com a gente!',
       'partners.emersonDesc': 'Jogos em mídia digital há quase 10 anos',
       'partners.idealizeDesc': 'Impressões e projetos 3D sob medida',
 
       'footer.rights': 'Todos os direitos reservados.',
-      'footer.credits': 'Feito com 🤠 para a comunidade.'
+      'footer.credits': 'Feito na vibe neon para a comunidade. 🌴'
     },
 
     en: {
@@ -75,7 +75,7 @@
       'nav.partners': 'Partners',
       'nav.followTwitch': 'Follow on Twitch',
 
-      'hero.tagline': 'Reacts, gameplays and tons of fun live. Come hang out in the stream! 🎮🪓',
+      'hero.tagline': 'Reacts, gameplays and tons of fun live. Lights on, chat heating up — jump in! 🎮🌴',
       'hero.watchLive': '▶ Watch live',
       'hero.instagram': 'See on Instagram',
       'hero.pix': '💸 Support via Live PIX',
@@ -83,23 +83,23 @@
 
       'live.title': 'Live stream',
       'live.checking': 'Checking if the stream is live…',
-      'live.online': "🎮 I'm LIVE right now! Join the stream and come chat with us!",
-      'live.offline': "We're currently offline. Turn on notifications on Twitch so you don't miss the next stream!",
+      'live.online': "🎮 I'm LIVE right now! Lights are on — join the stream and come chat with us!",
+      'live.offline': "The lights are off for now. Turn on notifications on Twitch so you don't miss the next stream!",
       'live.titleOnline': 'LIVE now',
       'live.titleOffline': 'Offline',
 
       'about.title': 'About the channel',
-      'about.p1': "Hey there! I'm <strong>Machado Gamer</strong>, a content creator focused on reacts, gameplays and live fun. The vibe here is laid-back, with lots of chat interaction.",
-      'about.p2': 'Join the streams, hit follow and become part of this community! 🪓',
+      'about.p1': "Hey there! I'm <strong>Machado Gamer</strong>, a content creator focused on reacts, gameplays and live fun. The vibe here is neon — laid-back talk, chat in the mix, and that sunset-on-the-strip energy.",
+      'about.p2': 'Join the streams, hit follow and roll with the crew! 🌴',
       'about.statTwitch': '📺 Twitch followers',
       'about.statInsta': '📸 Instagram followers',
 
-      'schedule.title': '🗓️ Stream schedule',
+      'schedule.title': '🌆 Stream schedule',
       'schedule.weekdays': 'Monday to Friday',
       'schedule.time1': '6 AM – 8 AM',
       'schedule.time2': '7 PM – 9 PM',
-      'schedule.morning': 'Morning stream',
-      'schedule.night': 'Evening stream',
+      'schedule.morning': 'Morning session',
+      'schedule.night': 'Night session',
       'schedule.note': 'Schedule may vary.<br />Check our social media.<br />Brasília time (GMT-3).',
 
       'socials.title': 'Social media',
@@ -114,12 +114,12 @@
       'picks.cta': 'See my storefront on Mercado Livre →',
 
       'partners.title': '🤝 Partners',
-      'partners.sub': 'Those who walk alongside us!',
+      'partners.sub': 'The crew riding with us!',
       'partners.emersonDesc': 'Digital media games for almost 10 years',
       'partners.idealizeDesc': 'Custom 3D prints and projects',
 
       'footer.rights': 'All rights reserved.',
-      'footer.credits': 'Made with 🤠 for the community.'
+      'footer.credits': 'Made with neon vibes for the community. 🌴'
     }
   };
 

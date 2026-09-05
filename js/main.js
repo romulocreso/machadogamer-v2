@@ -89,44 +89,11 @@ if (igEl) {
     .catch(() => { /* mantém o valor já presente no HTML */ });
 }
 
-// ===== Camada de UX (scroll): reveals, header reativo, indicador e parallax =====
+// ===== Camada de UX (scroll): header reativo e parallax =====
 (function () {
   'use strict';
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // Marca elementos para "reveal" ao entrar na tela.
-  const blockSelectors = ['.section-head', '.about-media', '.about-text', '.schedule-note'];
-  blockSelectors.forEach((sel) => {
-    document.querySelectorAll(sel).forEach((el) => el.classList.add('reveal'));
-  });
-
-  // Grupos de cards entram em sequência (stagger).
-  const groupSelectors = ['.socials', '.partners', '.schedule'];
-  groupSelectors.forEach((sel) => {
-    document.querySelectorAll(sel).forEach((group) => {
-      Array.from(group.children).forEach((child, i) => {
-        child.classList.add('reveal');
-        child.dataset.delay = String((i % 6) + 1);
-      });
-    });
-  });
-
-  // IntersectionObserver dispara o reveal.
-  const revealEls = document.querySelectorAll('.reveal');
-  if (reduceMotion || !('IntersectionObserver' in window)) {
-    revealEls.forEach((el) => el.classList.add('is-visible'));
-  } else {
-    const io = new IntersectionObserver((entries, obs) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
-    revealEls.forEach((el) => io.observe(el));
-  }
 
   // Header reativo + parallax sutil no hero + hero "pinado" (estilo GTA VI).
   const header = document.querySelector('.site-header');
@@ -159,22 +126,10 @@ if (igEl) {
     ticking = false;
   };
 
+  // Rolagem nativa do navegador (sem suavização/inércia por biblioteca).
   window.addEventListener('scroll', () => {
     if (!ticking) { window.requestAnimationFrame(onScroll); ticking = true; }
   }, { passive: true });
-
-  // Lenis: scroll suavizado com inércia. Só ativa se o usuário não pediu
-  // movimento reduzido e a lib carregou. Mantém o window.scroll sincronizado.
-  if (!reduceMotion && typeof Lenis !== 'undefined') {
-    const lenis = new Lenis({
-      lerp: 0.12,            // assenta um pouco mais rápido (menos "deriva")
-      smoothWheel: true,
-      wheelMultiplier: 0.8,  // cada giro da roda anda menos → menos overshoot
-    });
-    lenis.on('scroll', onScroll);
-    const raf = (time) => { lenis.raf(time); requestAnimationFrame(raf); };
-    requestAnimationFrame(raf);
-  }
 
   onScroll();
 

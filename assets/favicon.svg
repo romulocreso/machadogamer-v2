@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Machado Gamer">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff2d7e"/>
+      <stop offset=".5" stop-color="#ff5c4d"/>
+      <stop offset="1" stop-color="#ffb43c"/>
+    </linearGradient>
+    <clipPath id="horizon"><rect x="0" y="0" width="64" height="42"/></clipPath>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#150826"/>
+  <rect x="4" y="4" width="56" height="56" rx="11" fill="url(#g)"/>
+  <circle cx="32" cy="44" r="19" fill="#ffe0a0" opacity=".55" clip-path="url(#horizon)"/>
+  <g fill="#150826">
+    <rect x="8" y="38" width="48" height="6"/>
+    <rect x="8" y="29" width="48" height="4.5" opacity=".9"/>
+    <rect x="8" y="21" width="48" height="3.5" opacity=".72"/>
+    <rect x="8" y="14" width="48" height="3" opacity=".5"/>
+  </g>
+</svg>

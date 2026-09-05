@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Canal oficial do Machado Gamer — lives, reacts e gameplays na Twitch. Assista ao vivo e siga nas redes sociais." />
-  <meta name="theme-color" content="#A4271A" />
+  <meta name="theme-color" content="#ff2d7e" />
 
   <!-- Open Graph (preview ao compartilhar o link) -->
   <meta property="og:title" content="Machado Gamer — Canal Oficial" />
-  <meta property="og:description" content="Lives, reacts e gameplays na Twitch. Assista ao vivo!" />
+  <meta property="og:description" content="Lives, reacts e gameplays na Twitch. Luzes acesas — cola na live!" />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="assets/banner.png" />
   <meta property="og:image:width" content="1200" />
@@ -16,10 +16,11 @@
 
   <title>Machado Gamer — Canal Oficial</title>
 
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="icon" type="image/png" href="assets/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rye&family=Special+Elite&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 
   <!-- GoatCounter — analytics de acessos (painel: https://machadogamer.goatcounter.com) -->
@@ -28,9 +29,33 @@
 </head>
 <body>
 
+  <!-- ===================== MARCA (SVG) — gradientes e recortes compartilhados =====================
+       O logotipo neon (estilo Vice City) é desenhado em SVG inline: usa as fontes já
+       carregadas (Anton / Bebas Neue) e o degradê pôr do sol #ff2d7e → #ffb43c.
+       Estes <defs> são referenciados por todas as versões (header, hero, rodapé, loader). -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="mg-sunset" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ff2d7e" /><stop offset=".48" stop-color="#ff5c4d" /><stop offset="1" stop-color="#ffb43c" />
+      </linearGradient>
+      <linearGradient id="mg-sunset-h" x1="0" y1="0" x2="1" y2=".2">
+        <stop offset="0" stop-color="#ff2d7e" /><stop offset=".55" stop-color="#ff6a45" /><stop offset="1" stop-color="#ffb43c" />
+      </linearGradient>
+      <radialGradient id="mg-disc" cx=".5" cy=".62" r=".62">
+        <stop offset="0" stop-color="#ffcf6b" /><stop offset=".45" stop-color="#ff6a45" /><stop offset="1" stop-color="#c11d73" />
+      </radialGradient>
+      <clipPath id="mg-tophalf"><rect x="-320" y="-320" width="640" height="320" /></clipPath>
+    </defs>
+  </svg>
+
   <!-- Tela de carregamento (fade da marca enquanto os assets carregam) -->
   <div id="loader" class="loader">
-    <img src="assets/logo-horizontal.png" alt="" class="loader-logo" />
+    <svg class="loader-logo" viewBox="0 0 476 104" role="img" aria-label="Machado Gamer">
+      <text x="6" y="74" font-family="Anton, 'Arial Narrow', sans-serif" font-size="58" letter-spacing="-1"
+            textLength="250" lengthAdjust="spacing" fill="url(#mg-sunset-h)"
+            stroke="#150826" stroke-width="4" style="paint-order:stroke">MACHADO</text>
+      <text x="272" y="74" font-family="'Bebas Neue', sans-serif" font-size="52" letter-spacing="4" fill="#2de2e6">GAMER</text>
+    </svg>
   </div>
 
   <!-- Âncora do topo (fora do header sticky, para o scroll funcionar certo) -->
@@ -40,7 +65,12 @@
   <header class="site-header">
     <div class="container nav-wrap">
       <a class="brand" href="#topo" aria-label="Machado Gamer - início">
-        <img src="assets/logo-horizontal.png" alt="Machado Gamer" class="brand-logo" />
+        <svg class="brand-logo" viewBox="0 0 476 104" role="img" aria-label="Machado Gamer">
+          <text x="6" y="74" font-family="Anton, 'Arial Narrow', sans-serif" font-size="58" letter-spacing="-1"
+                textLength="250" lengthAdjust="spacing" fill="url(#mg-sunset-h)"
+                stroke="#150826" stroke-width="4" style="paint-order:stroke">MACHADO</text>
+          <text x="272" y="74" font-family="'Bebas Neue', sans-serif" font-size="52" letter-spacing="4" fill="#2de2e6">GAMER</text>
+        </svg>
       </a>
 
       <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">
@@ -71,10 +101,30 @@
     <div class="hero-bg" aria-hidden="true"></div>
     <div class="container hero-content">
       <h1 class="hero-title">
-        <img src="assets/logo-principal.png" alt="Machado Gamer" class="hero-poster" />
+        <svg class="hero-poster" viewBox="0 0 720 340" role="img" aria-label="Machado Gamer">
+          <g transform="translate(360 176)">
+            <g clip-path="url(#mg-tophalf)">
+              <circle r="150" fill="url(#mg-disc)" opacity=".92" />
+              <g fill="#150826">
+                <rect x="-160" y="-14" width="320" height="13" />
+                <rect x="-160" y="-40" width="320" height="10" opacity=".92" />
+                <rect x="-160" y="-64" width="320" height="8" opacity=".82" />
+                <rect x="-160" y="-86" width="320" height="6" opacity=".7" />
+                <rect x="-160" y="-106" width="320" height="5" opacity=".55" />
+              </g>
+            </g>
+          </g>
+          <text x="360" y="252" text-anchor="middle" font-family="Anton, 'Arial Narrow', sans-serif"
+                font-size="150" letter-spacing="-2" fill="url(#mg-sunset)"
+                stroke="#150826" stroke-width="7" style="paint-order:stroke">MACHADO</text>
+          <line x1="70" y1="296" x2="278" y2="296" stroke="#2de2e6" stroke-width="2" />
+          <line x1="442" y1="296" x2="650" y2="296" stroke="#2de2e6" stroke-width="2" />
+          <text x="360" y="309" text-anchor="middle" font-family="'Bebas Neue', sans-serif"
+                font-size="52" letter-spacing="20" fill="#2de2e6">GAMER</text>
+        </svg>
       </h1>
       <!-- TROCAR: tagline/bio curta abaixo -->
-      <p class="hero-tagline" data-i18n="hero.tagline">Reacts, gameplays e muita zoeira ao vivo. Chega mais e cola na live! 🎮🪓</p>
+      <p class="hero-tagline" data-i18n="hero.tagline">Reacts, gameplays e muita zoeira ao vivo. As luzes acendem, o chat esquenta — cola na live! 🎮🌴</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="https://www.twitch.tv/machadogameroficial" target="_blank" rel="noopener" data-i18n="hero.watchLive">▶ Assistir ao vivo</a>
         <a class="btn btn-ghost" href="https://www.instagram.com/machadogameroficial/" target="_blank" rel="noopener" data-i18n="hero.instagram">Ver no Instagram</a>
@@ -113,12 +163,12 @@
 
       <div class="about-grid">
         <div class="about-media">
-          <img src="assets/28ea0026-0787-4497-8b88-289db722919d.png" alt="Foto do Machado Gamer" class="about-photo" />
+          <img src="assets/sobre-avatar.svg" alt="Machado Gamer — pôr do sol de Vice City" class="about-photo" />
         </div>
         <div class="about-text">
           <!-- TROCAR: texto de apresentação abaixo -->
-          <p data-i18n-html="about.p1">E aí, galera! Eu sou o <strong>Machado Gamer</strong>, criador de conteúdo focado em reacts, gameplays e diversão ao vivo. Aqui o clima é leve, com muita interação com a galera do chat.</p>
-          <p data-i18n="about.p2">Cola nas lives, deixa o follow e faz parte dessa comunidade! 🪓</p>
+          <p data-i18n-html="about.p1">E aí, galera! Eu sou o <strong>Machado Gamer</strong>, criador de conteúdo focado em reacts, gameplays e diversão ao vivo. Aqui o clima é neon: papo solto, chat na área e aquela vibe de fim de tarde na orla.</p>
+          <p data-i18n="about.p2">Cola nas lives, deixa o follow e entra pro bonde! 🌴</p>
           <ul class="about-stats">
             <li>
               <strong id="twitchFollowers" data-channel="machadogameroficial" title="Atualizado automaticamente">…</strong>
@@ -139,7 +189,7 @@
   <section class="section" id="agenda">
     <div class="container">
       <header class="section-head">
-        <h2 class="section-title" data-i18n="schedule.title">🗓️ Agenda de lives</h2>
+        <h2 class="section-title" data-i18n="schedule.title">🌆 Agenda de lives</h2>
       </header>
 
       <!-- TROCAR: dias e horários reais abaixo -->
@@ -147,12 +197,12 @@
         <div class="schedule-card card">
           <span class="schedule-day" data-i18n="schedule.weekdays">Segunda a Sexta</span>
           <span class="schedule-time" data-i18n="schedule.time1">06h às 08h</span>
-          <span class="schedule-game" data-i18n="schedule.morning">Live da manhã</span>
+          <span class="schedule-game" data-i18n="schedule.morning">Sessão da manhã</span>
         </div>
         <div class="schedule-card card">
           <span class="schedule-day" data-i18n="schedule.weekdays">Segunda a Sexta</span>
           <span class="schedule-time" data-i18n="schedule.time2">19h às 21h</span>
-          <span class="schedule-game" data-i18n="schedule.night">Live da noite</span>
+          <span class="schedule-game" data-i18n="schedule.night">Sessão da noite</span>
         </div>
       </div>
       <p class="schedule-note" data-i18n-html="schedule.note">
@@ -270,7 +320,7 @@
     <div class="container">
       <header class="section-head">
         <h2 class="section-title" data-i18n="partners.title">🤝 Parcerias</h2>
-        <p class="section-sub" data-i18n="partners.sub">Quem caminha junto com a gente!</p>
+        <p class="section-sub" data-i18n="partners.sub">Quem tá no corre junto com a gente!</p>
       </header>
 
       <div class="partners">
@@ -296,15 +346,16 @@
   <!-- ===================== RODAPÉ ===================== -->
   <footer class="site-footer">
     <div class="container footer-wrap">
-      <img src="assets/logo-horizontal.png" alt="Machado Gamer" class="footer-logo" />
+      <svg class="footer-logo" viewBox="0 0 476 104" role="img" aria-label="Machado Gamer">
+        <text x="6" y="74" font-family="Anton, 'Arial Narrow', sans-serif" font-size="58" letter-spacing="-1"
+              textLength="250" lengthAdjust="spacing" fill="url(#mg-sunset-h)"
+              stroke="#150826" stroke-width="4" style="paint-order:stroke">MACHADO</text>
+        <text x="272" y="74" font-family="'Bebas Neue', sans-serif" font-size="52" letter-spacing="4" fill="#2de2e6">GAMER</text>
+      </svg>
       <p>&copy; <span id="ano"></span> Machado Gamer. <span data-i18n="footer.rights">Todos os direitos reservados.</span></p>
-      <p class="footer-credits" data-i18n="footer.credits">Feito com 🤠 para a comunidade.</p>
+      <p class="footer-credits" data-i18n="footer.credits">Feito na vibe neon para a comunidade. 🌴</p>
     </div>
   </footer>
-
-  <!-- Lenis: scroll suave com inércia (sensação cinematográfica, estilo GTA VI).
-       Carrega antes do main.js, que o inicializa se prefers-reduced-motion não estiver ativo. -->
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
 
   <!-- i18n (PT | EN) deve carregar antes do main.js para as mensagens da live -->
   <script src="js/i18n.js"></script>

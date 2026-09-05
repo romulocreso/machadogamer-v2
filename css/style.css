@@ -1,28 +1,28 @@
-/* ===================== VARIÁVEIS & RESET (tema faroeste) ===================== */
+/* ===================== VARIÁVEIS & RESET (tema Vice City / GTA VI) ===================== */
 :root {
-  /* Paleta do rebranding Machado Gamer */
-  --bg: #13120e;            /* preto quente */
-  --bg-alt: #1a1611;
-  --surface: #221b13;       /* couro/madeira */
-  --surface-2: #2c241a;
-  --border: #3f2e1d;        /* envelhecido */
-  --text: #ecdcb5;          /* areia clara */
-  --text-dim: #b3a07e;
-  --accent: #a4271a;        /* vermelho escuro (marca) */
-  --accent-deep: #5e1109;
-  --accent-2: #caa877;      /* areia */
-  --sand: #caa877;
-  --aged: #5c3b20;          /* envelhecido */
-  --accent-glow: rgba(164, 39, 26, 0.45);
-  --live: #d23a1f;
+  /* Paleta neon-pôr-do-sol inspirada no GTA VI */
+  --bg: #150826;            /* roxo-noite profundo */
+  --bg-alt: #1e0d36;
+  --surface: #271247;       /* roxo arquibancada */
+  --surface-2: #34195e;
+  --border: #4a2b7d;        /* violeta neon suave */
+  --text: #f4ecff;          /* branco lilás */
+  --text-dim: #b8a0dd;
+  --accent: #ff2d7e;        /* rosa Vice (marca) */
+  --accent-deep: #b3005e;
+  --accent-2: #ff9a3c;      /* laranja pôr-do-sol */
+  --sand: #2de2e6;          /* ciano neon (ex-"areia") */
+  --aged: #ff7a2f;          /* laranja quente */
+  --accent-glow: rgba(255, 45, 126, 0.45);
+  --live: #ff3b6b;
   --radius: 8px;
   --maxw: 1180px;
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+html { scroll-behavior: auto; scroll-padding-top: 80px; }
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -49,11 +49,11 @@ a { color: inherit; text-decoration: none; }
 
 .accent { color: var(--accent); }
 
-/* Fonte de exibição western */
+/* Fonte de exibição neon (estilo Vice City) */
 .brand-name, .hero-title, .section-title, .gallery-title,
 .vods-head h3, .schedule-day {
-  font-family: 'Rye', 'Special Elite', serif;
-  font-weight: 400; letter-spacing: 0.5px;
+  font-family: 'Bebas Neue', 'Inter', sans-serif;
+  font-weight: 400; letter-spacing: 1.5px;
 }
 
 /* ===================== BOTÕES ===================== */
@@ -67,30 +67,30 @@ a { color: inherit; text-decoration: none; }
 }
 .btn-sm { padding: 8px 16px; font-size: 0.78rem; }
 .btn-primary {
-  background: var(--accent); color: #f5e7c8;
-  border-color: #c5432f; box-shadow: 0 6px 18px var(--accent-glow);
+  background: var(--accent); color: #fff;
+  border-color: #ff6aa8; box-shadow: 0 6px 18px var(--accent-glow), 0 0 22px var(--accent-glow);
 }
-.btn-primary:hover { background: #bd2e1e; transform: translateY(-2px); }
+.btn-primary:hover { background: #ff4d92; transform: translateY(-2px); box-shadow: 0 8px 24px var(--accent-glow), 0 0 30px var(--accent-glow); }
 .btn-ghost { background: transparent; color: var(--sand); border-color: var(--sand); }
-.btn-ghost:hover { background: rgba(202,168,119,.12); transform: translateY(-2px); }
+.btn-ghost:hover { background: rgba(45, 226, 230, .12); transform: translateY(-2px); box-shadow: 0 0 20px rgba(45, 226, 230, .3); }
 
 /* ===================== HEADER / NAV ===================== */
 .site-header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(19, 18, 14, 0.88);
+  background: rgba(21, 8, 38, 0.85);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
-  box-shadow: 0 2px 0 rgba(94, 17, 9, .35);
+  box-shadow: 0 2px 0 rgba(255, 45, 126, .35);
 }
 .nav-wrap { display: flex; align-items: center; justify-content: space-between; height: 68px; }
 .brand { display: flex; align-items: center; gap: 10px; }
-.brand-logo { height: 46px; width: auto; display: block; }
+.brand-logo { height: 42px; width: auto; display: block; overflow: visible; }
 .brand-name { font-size: 1.25rem; color: var(--sand); }
 
 .main-nav { display: flex; align-items: center; gap: 26px; }
 .main-nav a { font-weight: 600; color: var(--text-dim); text-transform: uppercase; font-size: .85rem; letter-spacing: .5px; transition: color .2s; }
 .main-nav a:hover { color: var(--sand); }
-.main-nav a.btn { color: #f5e7c8; }
+.main-nav a.btn { color: #fff; }
 
 .nav-toggle { display: none; flex-direction: column; gap: 5px; background: none; border: 0; cursor: pointer; padding: 6px; }
 .nav-toggle span { width: 26px; height: 3px; background: var(--sand); border-radius: 3px; transition: .3s; }
@@ -103,9 +103,10 @@ a { color: inherit; text-decoration: none; }
 .hero-bg {
   position: absolute; inset: 0; z-index: 0;
   background:
-    radial-gradient(circle at 50% 12%, rgba(164, 39, 26, 0.40), transparent 55%),
-    radial-gradient(circle at 50% 90%, rgba(94, 17, 9, 0.30), transparent 60%),
-    var(--bg);
+    radial-gradient(circle at 50% 8%, rgba(255, 45, 126, 0.42), transparent 52%),
+    radial-gradient(circle at 78% 30%, rgba(255, 154, 60, 0.30), transparent 45%),
+    radial-gradient(circle at 20% 70%, rgba(45, 226, 230, 0.22), transparent 50%),
+    linear-gradient(180deg, #2a0d40 0%, var(--bg) 55%, #12061f 100%);
 }
 .hero-content { position: relative; z-index: 1; }
 .badge {
@@ -117,26 +118,24 @@ a { color: inherit; text-decoration: none; }
 }
 .badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--live); box-shadow: 0 0 0 0 rgba(210,58,31,.6); animation: pulse 1.8s infinite; }
 .hero-title { line-height: 1; margin: 0; }
+/* Logotipo neon do hero (SVG inline): centralizado, com halo rosa. */
 .hero-poster {
-  width: 100vw; max-width: 100vw; height: auto;
-  margin: 10px calc(50% - 50vw) 0;   /* break-out full-bleed */
-  filter: drop-shadow(0 22px 48px rgba(0, 0, 0, 0.6));
+  display: block;
+  width: min(760px, 92vw); max-width: 100%; height: auto;
+  margin: 12px auto 0;
+  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.55))
+          drop-shadow(0 0 44px rgba(255, 45, 126, 0.4));
 }
-/* Em telas largas: trava a altura (centraliza, sem distorcer/cortar) */
 @media (min-width: 1180px) {
-  .hero-poster {
-    width: auto; max-width: 100%;
-    height: min(742px, 78vh);
-    margin: 10px auto 0;
-  }
+  .hero-poster { width: min(720px, 62vw); }
 }
 .hero-tagline { color: var(--text-dim); font-size: clamp(1rem, 2.5vw, 1.2rem); max-width: 600px; margin: 18px auto 30px; }
 .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 .hero-pix { margin-top: 16px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .btn-pix { background: transparent; color: var(--sand); border-color: var(--sand); }
-.btn-pix:hover { background: rgba(202,168,119,.12); border-color: var(--sand); transform: translateY(-2px); }
+.btn-pix:hover { background: rgba(45, 226, 230, .12); border-color: var(--sand); transform: translateY(-2px); box-shadow: 0 0 20px rgba(45, 226, 230, .3); }
 .btn-streamlabs { background: transparent; color: var(--sand); border-color: var(--sand); }
-.btn-streamlabs:hover { background: rgba(202,168,119,.12); border-color: var(--sand); transform: translateY(-2px); }
+.btn-streamlabs:hover { background: rgba(45, 226, 230, .12); border-color: var(--sand); transform: translateY(-2px); box-shadow: 0 0 20px rgba(45, 226, 230, .3); }
 
 /* ===================== SEÇÕES GERAIS ===================== */
 .section { padding: 92px 0; }
@@ -151,11 +150,17 @@ a { color: inherit; text-decoration: none; }
   );
 }
 .section-head { text-align: center; margin-bottom: 44px; }
-.section-title { font-size: clamp(1.7rem, 4vw, 2.5rem); color: var(--sand); }
-/* divisor com losango western */
+.section-title {
+  font-size: clamp(1.9rem, 4.4vw, 2.8rem); color: var(--sand);
+  text-shadow: 0 0 18px rgba(45, 226, 230, 0.45), 0 0 40px rgba(255, 45, 126, 0.2);
+}
+/* divisor: barra neon degradê rosa → ciano */
 .section-title::after {
-  content: "✦"; display: block; color: var(--accent);
-  font-size: 0.8rem; margin: 12px auto 0; letter-spacing: 6px;
+  content: ""; display: block;
+  width: 68px; height: 3px; border-radius: 3px;
+  margin: 14px auto 0;
+  background: linear-gradient(90deg, var(--accent), var(--sand));
+  box-shadow: 0 0 14px var(--accent-glow);
 }
 .section-sub { color: var(--text-dim); margin-top: 4px; max-width: 600px; margin-left: auto; margin-right: auto; }
 
@@ -199,7 +204,7 @@ a { color: inherit; text-decoration: none; }
   font-size: 1.5rem; line-height: 1; cursor: pointer; transition: .2s;
   display: flex; align-items: center; justify-content: center;
 }
-.car-btn:hover { background: var(--accent); border-color: var(--accent); color: #f5e7c8; transform: translateY(-2px); }
+.car-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-2px); }
 
 .carousel {
   display: flex; gap: 16px; overflow-x: auto;
@@ -227,27 +232,26 @@ a { color: inherit; text-decoration: none; }
 
 /* ===================== SOBRE + GALERIA ===================== */
 .about-grid { display: grid; grid-template-columns: 320px 1fr; gap: 40px; align-items: center; }
-/* Moldura "medalhão" faroeste: aro em areia/dourado com fio vermelho da marca
-   e brilho sutil. A moldura fica no contêiner (a foto tem clip-path, que
-   recortaria uma borda aplicada nela própria). */
+/* Moldura "medalhão" neon: aro em degradê pôr do sol (rosa → ciano) com halo
+   duplo. A moldura fica no contêiner (a foto tem clip-path, que recortaria
+   uma borda aplicada nela própria). */
 .about-media {
   width: 100%;
   max-width: 320px;
   margin-inline: auto;
   aspect-ratio: 1;
-  padding: 2px;
+  padding: 4px;
   border-radius: 50%;
-  background: radial-gradient(circle at 32% 28%, var(--sand), var(--aged) 72%);
+  background: conic-gradient(from 210deg, var(--accent), var(--accent-2) 35%, var(--sand) 62%, var(--accent) 100%);
   box-shadow:
-    0 12px 30px rgba(0, 0, 0, 0.55),
-    0 0 0 1px var(--accent-deep),
-    0 0 18px var(--accent-glow);
+    0 14px 34px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 45, 126, 0.45),
+    0 0 26px var(--accent-glow),
+    0 0 46px rgba(45, 226, 230, 0.28);
 }
-/* clip-path corta a franja branca que vem embutida na borda do PNG. */
 .about-photo {
   width: 100%; aspect-ratio: 1;
   border-radius: 50%;
-  clip-path: circle(48.5% at 50% 50%);
   object-fit: cover; display: block;
 }
 .about-text { text-align: center; }
@@ -255,7 +259,7 @@ a { color: inherit; text-decoration: none; }
 .about-text strong { color: var(--text); }
 .about-stats { list-style: none; display: flex; gap: 28px; margin-top: 22px; flex-wrap: wrap; justify-content: center; }
 .about-stats li { display: flex; flex-direction: column; }
-.about-stats strong { font-family: 'Rye', serif; font-size: 1.5rem; color: var(--sand); }
+.about-stats strong { font-family: 'Bebas Neue', 'Inter', sans-serif; font-size: 1.8rem; letter-spacing: 1px; color: var(--sand); text-shadow: 0 0 16px rgba(45, 226, 230, 0.4); }
 .about-stats span { font-size: 0.85rem; color: var(--text-dim); }
 
 .gallery-title { margin: 50px 0 20px; text-align: center; color: var(--sand); }
@@ -306,10 +310,10 @@ a { color: inherit; text-decoration: none; }
    cima — mais forte embaixo, onde fica o texto — mantém tudo legível.
    No hover o véu clareia, "abrindo" mais a cena. */
 #redes .social-card {
-  background: linear-gradient(180deg, rgba(19, 18, 14, 0.18), rgba(19, 18, 14, 0.48));
+  background: linear-gradient(180deg, rgba(21, 8, 38, 0.22), rgba(21, 8, 38, 0.55));
 }
 #redes .social-card:hover {
-  background: linear-gradient(180deg, rgba(19, 18, 14, 0.06), rgba(19, 18, 14, 0.30));
+  background: linear-gradient(180deg, rgba(21, 8, 38, 0.08), rgba(21, 8, 38, 0.34));
 }
 #redes .social-name,
 #redes .social-handle { text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9); }
@@ -353,7 +357,7 @@ a { color: inherit; text-decoration: none; }
 /* ===================== RODAPÉ ===================== */
 .site-footer { background: var(--bg-alt); border-top: 1px solid var(--border); padding: 40px 0; }
 .footer-wrap { text-align: center; display: flex; flex-direction: column; gap: 10px; align-items: center; }
-.footer-logo { height: 54px; width: auto; }
+.footer-logo { height: 46px; width: auto; overflow: visible; opacity: .92; }
 .site-footer p { color: var(--text-dim); font-size: 0.9rem; }
 .footer-credits { font-size: 0.82rem; }
 
@@ -389,30 +393,9 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* =====================================================================
-   CAMADA DE UX (scroll) — reveals ao rolar, header reativo, indicador
-   "role para ver mais", parallax sutil e entradas suaves. Inspirada na
-   pega de navegação do GTA VI, mantendo a estética faroeste da marca.
+   CAMADA DE UX (scroll) — header reativo e parallax sutil no hero.
+   As seções aparecem já prontas, sem fade/atraso ao rolar.
    ===================================================================== */
-
-/* ---------- Reveal ao rolar (fade + slide-up) ---------- */
-@media (prefers-reduced-motion: no-preference) {
-  .reveal {
-    opacity: 0;
-    transform: translateY(42px);
-    transition:
-      opacity .85s cubic-bezier(.16, .84, .44, 1),
-      transform .85s cubic-bezier(.16, .84, .44, 1);
-    will-change: opacity, transform;
-  }
-  .reveal.is-visible { opacity: 1; transform: none; }
-  /* escalonamento (stagger) para grupos de cards */
-  .reveal[data-delay="1"] { transition-delay: .08s; }
-  .reveal[data-delay="2"] { transition-delay: .16s; }
-  .reveal[data-delay="3"] { transition-delay: .24s; }
-  .reveal[data-delay="4"] { transition-delay: .32s; }
-  .reveal[data-delay="5"] { transition-delay: .40s; }
-  .reveal[data-delay="6"] { transition-delay: .48s; }
-}
 
 /* ---------- Header reativo ao scroll ---------- */
 .site-header {
@@ -421,8 +404,8 @@ a { color: inherit; text-decoration: none; }
 }
 .site-header .nav-wrap { transition: height .35s ease; }
 .site-header.is-scrolled {
-  background: rgba(19, 18, 14, 0.96);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, .55), 0 2px 0 rgba(94, 17, 9, .55);
+  background: rgba(21, 8, 38, 0.96);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .55), 0 2px 0 rgba(255, 45, 126, .55);
 }
 .site-header.is-scrolled .nav-wrap { height: 58px; }
 .site-header.is-scrolled .brand-logo { height: 38px; }
@@ -501,14 +484,16 @@ a { color: inherit; text-decoration: none; }
   position: fixed; inset: 0; z-index: 10000;
   display: flex; align-items: center; justify-content: center;
   background:
-    radial-gradient(circle at 50% 42%, rgba(164, 39, 26, 0.35), transparent 60%),
+    radial-gradient(circle at 50% 38%, rgba(255, 45, 126, 0.34), transparent 58%),
+    radial-gradient(circle at 50% 80%, rgba(45, 226, 230, 0.18), transparent 60%),
     var(--bg);
   transition: opacity .6s ease, visibility .6s ease;
 }
 .loader-logo {
-  height: 64px; width: auto;
+  height: 54px; width: auto; overflow: visible;
   animation: loaderPulse 1.4s ease-in-out infinite;
-  filter: drop-shadow(0 10px 26px rgba(0, 0, 0, .6));
+  filter: drop-shadow(0 10px 26px rgba(0, 0, 0, .6))
+          drop-shadow(0 0 30px rgba(255, 45, 126, .4));
 }
 .loader.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 @keyframes loaderPulse {
@@ -532,10 +517,6 @@ a { color: inherit; text-decoration: none; }
     padding-top: 0; padding-bottom: 0;
   }
   .hero .container { width: 100%; }
-  /* Pôster respira um pouco menos para caber com o texto na tela cheia. */
-  @media (min-width: 1180px) {
-    .hero-poster { height: min(620px, 68vh); }
-  }
 }
 
 /* ---------- CTA contextual no header (aparece após sair do topo) ---------- */
@@ -577,21 +558,22 @@ a { color: inherit; text-decoration: none; }
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  border-color: rgba(92, 59, 32, 0.7);
+  border-color: rgba(74, 43, 125, 0.75);
 }
+/* Véu neon-pôr-do-sol (rosa no topo → roxo → ciano embaixo) sobre a paisagem */
 #sobre > .container {
   background-image:
     linear-gradient(180deg,
-      rgba(19, 18, 14, 0.82) 0%,
-      rgba(19, 18, 14, 0.62) 50%,
-      rgba(19, 18, 14, 0.85) 100%),
+      rgba(43, 8, 64, 0.82) 0%,
+      rgba(120, 20, 90, 0.55) 45%,
+      rgba(18, 6, 31, 0.88) 100%),
     url("../assets/background-i.webp");
 }
 #redes > .container {
   background-image:
     linear-gradient(180deg,
-      rgba(19, 18, 14, 0.82) 0%,
-      rgba(19, 18, 14, 0.62) 50%,
-      rgba(19, 18, 14, 0.85) 100%),
+      rgba(43, 8, 64, 0.82) 0%,
+      rgba(20, 70, 110, 0.5) 45%,
+      rgba(18, 6, 31, 0.88) 100%),
     url("../assets/background-ii.webp");
 }

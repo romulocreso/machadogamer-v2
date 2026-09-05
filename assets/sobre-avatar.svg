@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Machado Gamer — pôr do sol de Vice City">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c0836"/>
+      <stop offset=".36" stop-color="#5b1a73"/>
+      <stop offset=".60" stop-color="#c02f6b"/>
+      <stop offset=".72" stop-color="#ff5c4d"/>
+      <stop offset=".80" stop-color="#ffc24a"/>
+    </linearGradient>
+    <radialGradient id="sun" cx=".5" cy=".42" r=".62">
+      <stop offset="0" stop-color="#fff3d2"/>
+      <stop offset=".42" stop-color="#ffd166"/>
+      <stop offset="1" stop-color="#ff5c4d"/>
+    </radialGradient>
+    <clipPath id="circ"><circle cx="200" cy="200" r="198"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#circ)">
+    <rect width="400" height="400" fill="#0c0518"/>
+    <rect width="400" height="322" fill="url(#sky)"/>
+
+    <!-- sol + ripas -->
+    <circle cx="200" cy="236" r="98" fill="url(#sun)"/>
+    <g fill="#c02f6b" opacity=".45">
+      <rect x="108" y="214" width="184" height="4"/>
+      <rect x="100" y="226" width="200" height="5"/>
+    </g>
+    <g fill="#1c0836">
+      <rect x="92" y="242" width="216" height="8"/>
+      <rect x="90" y="258" width="220" height="11"/>
+      <rect x="88" y="278" width="224" height="15"/>
+      <rect x="86" y="302" width="228" height="20"/>
+    </g>
+
+    <!-- horizonte + chão -->
+    <rect x="0" y="320" width="400" height="80" fill="#0b0416"/>
+    <rect x="0" y="318" width="400" height="3" fill="#2de2e6"/>
+
+    <!-- grade neon em perspectiva -->
+    <g stroke="#2de2e6" stroke-width="1.6" opacity=".5" fill="none">
+      <line x1="200" y1="320" x2="-90" y2="400"/>
+      <line x1="200" y1="320" x2="20"  y2="400"/>
+      <line x1="200" y1="320" x2="120" y2="400"/>
+      <line x1="200" y1="320" x2="200" y2="400"/>
+      <line x1="200" y1="320" x2="280" y2="400"/>
+      <line x1="200" y1="320" x2="380" y2="400"/>
+      <line x1="200" y1="320" x2="490" y2="400"/>
+      <line x1="0" y1="334" x2="400" y2="334"/>
+      <line x1="0" y1="354" x2="400" y2="354"/>
+      <line x1="0" y1="382" x2="400" y2="382"/>
+    </g>
+
+    <!-- palmeiras -->
+    <g fill="#0b0416">
+      <g transform="translate(70 324) scale(1.1)">
+        <path d="M-4 0 C-9 -44 -6 -90 3 -138 C7 -90 6 -44 4 0 Z"/>
+        <path d="M2 -138 C-24 -152 -56 -150 -84 -134 C-56 -164 -20 -170 2 -138 Z"/>
+        <path d="M2 -138 C-12 -166 -38 -186 -68 -192 C-38 -194 -8 -174 2 -138 Z"/>
+        <path d="M2 -138 C5 -168 3 -200 -9 -226 C15 -204 22 -168 2 -138 Z"/>
+        <path d="M2 -138 C19 -164 46 -180 76 -184 C48 -164 21 -154 2 -138 Z"/>
+        <path d="M2 -138 C16 -162 42 -192 70 -210 C50 -182 26 -158 2 -138 Z"/>
+      </g>
+      <g transform="translate(336 328) scale(-0.78 0.78)">
+        <path d="M-4 0 C-9 -44 -6 -90 3 -138 C7 -90 6 -44 4 0 Z"/>
+        <path d="M2 -138 C-24 -152 -56 -150 -84 -134 C-56 -164 -20 -170 2 -138 Z"/>
+        <path d="M2 -138 C-12 -166 -38 -186 -68 -192 C-38 -194 -8 -174 2 -138 Z"/>
+        <path d="M2 -138 C5 -168 3 -200 -9 -226 C15 -204 22 -168 2 -138 Z"/>
+        <path d="M2 -138 C19 -164 46 -180 76 -184 C48 -164 21 -154 2 -138 Z"/>
+      </g>
+    </g>
+
+    <!-- vinheta -->
+    <circle cx="200" cy="200" r="198" fill="none" stroke="#000" stroke-opacity=".5" stroke-width="44"/>
+  </g>
+</svg>
