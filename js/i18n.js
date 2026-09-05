@@ -49,6 +49,7 @@
       'socials.sub': 'Segue em todas pra não perder nada!',
       'socials.joinGroup': 'Entrar no grupo',
       'socials.joinServer': 'Entrar no servidor',
+      'socials.followPage': 'Seguir a página',
 
       'picks.title': '🛒 Minhas indicações',
       'picks.sub': 'Produtos que eu uso e recomendo',
@@ -106,6 +107,7 @@
       'socials.sub': "Follow on all of them so you don't miss a thing!",
       'socials.joinGroup': 'Join the group',
       'socials.joinServer': 'Join the server',
+      'socials.followPage': 'Follow the page',
 
       'picks.title': '🛒 My picks',
       'picks.sub': 'Products I use and recommend',
