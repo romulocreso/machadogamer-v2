@@ -61,8 +61,7 @@
       'partners.emersonDesc': 'Jogos em mídia digital há quase 10 anos',
       'partners.idealizeDesc': 'Impressões e projetos 3D sob medida',
 
-      'footer.rights': 'Todos os direitos reservados.',
-      'footer.credits': 'Feito na vibe neon para a comunidade. 🌴'
+      'footer.rights': 'Todos os direitos reservados.'
     },
 
     en: {
@@ -118,8 +117,7 @@
       'partners.emersonDesc': 'Digital media games for almost 10 years',
       'partners.idealizeDesc': 'Custom 3D prints and projects',
 
-      'footer.rights': 'All rights reserved.',
-      'footer.credits': 'Made with neon vibes for the community. 🌴'
+      'footer.rights': 'All rights reserved.'
     }
   };
 

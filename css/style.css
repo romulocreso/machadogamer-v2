@@ -365,7 +365,6 @@ a { color: inherit; text-decoration: none; }
 .footer-wrap { text-align: center; display: flex; flex-direction: column; gap: 10px; align-items: center; }
 .footer-logo { height: 46px; width: auto; overflow: visible; opacity: .92; }
 .site-footer p { color: var(--text-dim); font-size: 0.9rem; }
-.footer-credits { font-size: 0.82rem; }
 
 /* ===================== ANIMAÇÕES ===================== */
 @keyframes pulse {
