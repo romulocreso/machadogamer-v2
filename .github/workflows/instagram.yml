@@ -1,118 +1,130 @@
+
 name: Atualiza seguidores do Instagram
 
-# Roda sozinho a cada 6 horas e também pode ser disparado na mão
-# (aba "Actions" do GitHub > este workflow > "Run workflow").
+# Execução automática a cada 6 horas (UTC) e manual pelo GitHub Actions.
 on:
   schedule:
     - cron: "0 */6 * * *"
   workflow_dispatch:
 
-# Permite que o robô faça commit do data/instagram.json atualizado.
 permissions:
   contents: write
+
+# Evita duas execuções tentando gravar ao mesmo tempo.
+concurrency:
+  group: instagram-followers-update
+  cancel-in-progress: false
 
 jobs:
   atualizar:
     runs-on: ubuntu-latest
     steps:
       - name: Baixa o repositório
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+        with:
+          ref: main
 
-      - name: Lê o perfil do Instagram
-        id: ig
+      - name: Consulta Instagram e atualiza o JSON, se houver mudanças
+        shell: bash
         run: |
-          set -e
+          set -euo pipefail
+
           USUARIO="machadogameroficial"
+          ARQUIVO="data/instagram.json"
 
-          # Valores atuais do JSON, usados como reserva se algum campo não vier.
-          SEGUINDO=$(jq -r '.following // ""' data/instagram.json)
-          POSTS=$(jq -r '.posts // ""' data/instagram.json)
+          if [[ ! -f "$ARQUIVO" ]]; then
+            echo "::error::Arquivo $ARQUIVO não encontrado."
+            exit 1
+          fi
+
+          ANT_SEGUIDORES=$(jq -r '.followers // ""' "$ARQUIVO")
+          ANT_SEGUINDO=$(jq -r '.following // ""' "$ARQUIVO")
+          ANT_POSTS=$(jq -r '.posts // ""' "$ARQUIVO")
+
+          SEGUIDORES_EXATOS=""
           SEGUIDORES=""
+          SEGUINDO="$ANT_SEGUINDO"
+          POSTS="$ANT_POSTS"
 
-          # ---- Método 1: endpoint de API que o próprio site usa ----
-          # (números EXATOS, mas costuma ser barrado em IP de servidor)
-          RESP=$(curl -s --max-time 30 \
+          # Método 1: API não oficial.
+          # Pode ser bloqueada pelo Instagram.
+          if RESP=$(curl -fsSL --retry 2 --connect-timeout 10 --max-time 30 \
             -H "x-ig-app-id: 936619743392459" \
-            -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
-            "https://i.instagram.com/api/v1/users/web_profile_info/?username=$USUARIO")
-          SEGUIDORES=$(echo "$RESP" | jq -r '.data.user.edge_followed_by.count // empty')
-          A_SEGUINDO=$(echo "$RESP" | jq -r '.data.user.edge_follow.count // empty')
-          A_POSTS=$(echo "$RESP"    | jq -r '.data.user.edge_owner_to_timeline_media.count // empty')
-          [ -n "$A_SEGUINDO" ] && SEGUINDO="$A_SEGUINDO"
-          [ -n "$A_POSTS" ]    && POSTS="$A_POSTS"
+            -H "User-Agent: Mozilla/5.0" \
+            "https://i.instagram.com/api/v1/users/web_profile_info/?username=$USUARIO"); then
 
-          # ---- Método 2: meta-descrição entregue a robôs (Facebook crawler) ----
-          # O Instagram serve uma tag tipo:
-          #   <meta property="og:description" content="29K Followers, 159 Following, 999 Posts - ...">
-          # Esse caminho costuma passar onde a API é bloqueada. Dá o número JÁ
-          # abreviado ("29K"), que é exatamente o formato que mostramos na página.
-          IG_PRONTO=""
-          if [ -z "$SEGUIDORES" ]; then
-            HTML=$(curl -s --max-time 30 -A "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)" \
-              "https://www.instagram.com/$USUARIO/")
-            DESC=$(echo "$HTML" | grep -oP '<meta property="og:description" content="\K[^"]+' | head -1)
-            if [ -n "$DESC" ]; then
-              # "29K Followers, 159 Following, 999 Posts"
-              IG_PRONTO=$(echo "$DESC" | grep -oP '^[0-9.,]+[KMB]?(?= Followers)' | head -1)
-              M_SEGUINDO=$(echo "$DESC" | grep -oP '[0-9.,]+(?= Following)' | head -1)
-              M_POSTS=$(echo "$DESC"    | grep -oP '[0-9.,]+(?= Posts)' | head -1)
-              [ -n "$M_SEGUINDO" ] && SEGUINDO="$M_SEGUINDO"
-              [ -n "$M_POSTS" ]    && POSTS="$M_POSTS"
+            SEGUIDORES_EXATOS=$(jq -r 'try (.data.user.edge_followed_by.count // empty) catch empty' <<< "$RESP" 2>/dev/null || true)
+            API_SEGUINDO=$(jq -r 'try (.data.user.edge_follow.count // empty) catch empty' <<< "$RESP" 2>/dev/null || true)
+            API_POSTS=$(jq -r 'try (.data.user.edge_owner_to_timeline_media.count // empty) catch empty' <<< "$RESP" 2>/dev/null || true)
+          else
+            CODIGO=$?
+            echo "::warning::Consulta à API falhou (curl: código $CODIGO); tentando a página pública."
+          fi
+
+          if [[ "$SEGUIDORES_EXATOS" =~ ^[0-9]+$ ]]; then
+            # Exemplo: 29345 -> 29,3K; 1200000 -> 1,2M.
+            SEGUIDORES=$(LC_ALL=C awk -v n="$SEGUIDORES_EXATOS" 'BEGIN {
+              if (n >= 1000000) { v = n / 1000000; s = "M" }
+              else if (n >= 1000) { v = n / 1000; s = "K" }
+              else { printf "%d", n; exit }
+              r = sprintf("%.1f", v)
+              sub(/\.0$/, "", r)
+              sub(/\./, ",", r)
+              printf "%s%s", r, s
+            }')
+            [[ "$API_SEGUINDO" =~ ^[0-9]+$ ]] && SEGUINDO="$API_SEGUINDO"
+            [[ "$API_POSTS" =~ ^[0-9]+$ ]] && POSTS="$API_POSTS"
+            echo "Instagram: contagem exata obtida pela API."
+          else
+            # Método 2: descrição pública do perfil.
+            # Pode retornar a contagem já abreviada.
+            if HTML=$(curl -fsSL --retry 2 --connect-timeout 10 --max-time 30 \
+              -A "facebookexternalhit/1.1" \
+              -H "Accept-Language: en-US,en;q=0.9" \
+              "https://www.instagram.com/$USUARIO/"); then
+
+              DESC=$(printf '%s' "$HTML" | grep -oP '<meta property="og:description" content="\K[^"]+' | head -n 1 || true)
+              META_SEGUIDORES=$(printf '%s' "$DESC" | grep -oiP '[0-9][0-9.,]*[KMB]?(?=\s+(?:Followers|Seguidores))' | head -n 1 || true)
+
+              if [[ -n "$META_SEGUIDORES" ]]; then
+                SEGUIDORES="${META_SEGUIDORES//./,}"
+                echo "Instagram: contagem abreviada obtida na página pública."
+              fi
+            else
+              CODIGO=$?
+              echo "::warning::Consulta à página falhou (curl: código $CODIGO)."
             fi
           fi
 
-          # ---- Decide o valor de seguidores a gravar ----
-          if [ -n "$SEGUIDORES" ]; then
-            # veio número exato -> abrevia: 29345 -> "29,3K", 1200000 -> "1,2M"
-            ABREV=$(awk -v n="$SEGUIDORES" 'BEGIN{
-              if (n>=1000000)      { v=n/1000000; s="M" }
-              else if (n>=1000)    { v=n/1000;    s="K" }
-              else                 { printf "%d", n; exit }
-              r=sprintf("%.1f", v); sub(/\.0$/,"",r); sub(/\./,",",r);
-              printf "%s%s", r, s
-            }')
-            DETALHE="$SEGUIDORES exato"
-          elif [ -n "$IG_PRONTO" ]; then
-            # veio já abreviado da meta-tag (ex.: "29K") -> usa direto, trocando . por ,
-            ABREV=$(echo "$IG_PRONTO" | sed 's/\./,/')
-            DETALHE="via meta-tag"
-          else
-            echo "::warning::Instagram não retornou o número (bloqueado ou formato mudou). Mantendo valor atual."
-            echo "ok=false" >> "$GITHUB_OUTPUT"
+          # Sem dado novo, não altera o JSON.
+          if [[ -z "$SEGUIDORES" ]]; then
+            echo "::warning::Nenhuma contagem disponível. Último valor mantido: $ANT_SEGUIDORES."
             exit 0
           fi
 
-          # Limpa vírgulas de milhar dos campos numéricos (ex.: "1,234" -> "1234")
-          [ -n "$SEGUINDO" ] && SEGUINDO=$(echo "$SEGUINDO" | tr -d '.,')
-          [ -n "$POSTS" ]    && POSTS=$(echo "$POSTS" | tr -d '.,')
-
-          echo "ok=true"            >> "$GITHUB_OUTPUT"
-          echo "seguidores=$ABREV"  >> "$GITHUB_OUTPUT"
-          echo "seguindo=$SEGUINDO" >> "$GITHUB_OUTPUT"
-          echo "posts=$POSTS"       >> "$GITHUB_OUTPUT"
-          echo "Lido: $ABREV seguidores ($DETALHE)."
-
-      - name: Grava data/instagram.json
-        if: steps.ig.outputs.ok == 'true'
-        run: |
-          cat > data/instagram.json <<EOF
-          {
-            "followers": "${{ steps.ig.outputs.seguidores }}",
-            "following": "${{ steps.ig.outputs.seguindo }}",
-            "posts": "${{ steps.ig.outputs.posts }}",
-            "updated": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          }
-          EOF
-
-      - name: Faz commit se o número mudou
-        if: steps.ig.outputs.ok == 'true'
-        run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet data/instagram.json; then
-            echo "Sem mudança — nada a commitar."
-          else
-            git add data/instagram.json
-            git commit -m "Instagram: atualiza seguidores (automático)"
-            git push
+          # Evita commits quando as contagens não mudaram.
+          if [[ "$SEGUIDORES" == "$ANT_SEGUIDORES" && "$SEGUINDO" == "$ANT_SEGUINDO" && "$POSTS" == "$ANT_POSTS" ]]; then
+            echo "Contagens inalteradas: $SEGUIDORES seguidores."
+            exit 0
           fi
+
+          DATA_ATUAL=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+          jq \
+            --arg seguidores "$SEGUIDORES" \
+            --arg seguindo "$SEGUINDO" \
+            --arg posts "$POSTS" \
+            --arg atualizado "$DATA_ATUAL" \
+            '.followers = $seguidores | .following = $seguindo | .posts = $posts | .updated = $atualizado' \
+            "$ARQUIVO" > "${ARQUIVO}.tmp"
+
+          mv "${ARQUIVO}.tmp" "$ARQUIVO"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add "$ARQUIVO"
+          git commit -m "Instagram: atualiza seguidores (automático)"
+          git push origin HEAD:main
+
+          echo "Atualização concluída: $SEGUIDORES seguidores."
