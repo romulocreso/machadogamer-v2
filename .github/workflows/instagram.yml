@@ -1,130 +1,235 @@
 
 name: Atualiza seguidores do Instagram
 
-# Execução automática a cada 6 horas (UTC) e manual pelo GitHub Actions.
+# Somente GitHub Actions e Python já disponível no Ubuntu.
+# Nenhum token, aplicativo Meta, serviço pago ou pacote extra.
 on:
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "17 */6 * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
 
-# Evita duas execuções tentando gravar ao mesmo tempo.
 concurrency:
-  group: instagram-followers-update
+  group: instagram-publico
   cancel-in-progress: false
 
 jobs:
   atualizar:
     runs-on: ubuntu-latest
     steps:
-      - name: Baixa o repositório
+      - name: Baixar o repositório
         uses: actions/checkout@v7
         with:
           ref: main
 
-      - name: Consulta Instagram e atualiza o JSON, se houver mudanças
+      - name: Consultar o perfil público e atualizar JSON
         shell: bash
         run: |
-          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import re
+          import sys
+          from datetime import datetime, timezone
+          from html.parser import HTMLParser
+          from pathlib import Path
+          from urllib.error import HTTPError, URLError
+          from urllib.request import Request, urlopen
+          import subprocess
 
-          USUARIO="machadogameroficial"
-          ARQUIVO="data/instagram.json"
+          USUARIO = "machadogameroficial"
+          ARQUIVO = Path("data/instagram.json")
 
-          if [[ ! -f "$ARQUIVO" ]]; then
-            echo "::error::Arquivo $ARQUIVO não encontrado."
-            exit 1
-          fi
+          if not ARQUIVO.is_file():
+              print(f"::error::Arquivo {ARQUIVO} não encontrado.")
+              sys.exit(1)
 
-          ANT_SEGUIDORES=$(jq -r '.followers // ""' "$ARQUIVO")
-          ANT_SEGUINDO=$(jq -r '.following // ""' "$ARQUIVO")
-          ANT_POSTS=$(jq -r '.posts // ""' "$ARQUIVO")
+          def solicitar(nome, url, api=False):
+              cabecalhos = {
+                  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0 Safari/537.36",
+                  "Accept-Language": "en-US,en;q=0.9,pt-BR;q=0.8",
+                  "Accept": "application/json" if api else "text/html,application/xhtml+xml",
+              }
+              if api:
+                  cabecalhos["x-ig-app-id"] = "936619743392459"
+              try:
+                  with urlopen(Request(url, headers=cabecalhos), timeout=20) as r:
+                      texto = r.read(3_000_000).decode("utf-8", errors="replace")
+                      print(f"{nome}: HTTP {r.status}; {len(texto)} caracteres recebidos.")
+                      return texto
+              except HTTPError as e:
+                  mensagem = ""
+                  try:
+                      obj = json.loads(e.read(2000).decode("utf-8", errors="replace"))
+                      mensagem = str(obj.get("message") or obj.get("error", {}).get("message", ""))[:160]
+                  except Exception:
+                      pass
+                  print(f"{nome}: HTTP {e.code}. {mensagem}")
+              except (URLError, TimeoutError, OSError) as e:
+                  print(f"{nome}: falha de conexão: {str(e)[:160]}")
+              return None
 
-          SEGUIDORES_EXATOS=""
-          SEGUIDORES=""
-          SEGUINDO="$ANT_SEGUINDO"
-          POSTS="$ANT_POSTS"
+          def buscar(caminho, *chaves):
+              valor = caminho
+              for chave in chaves:
+                  if not isinstance(valor, dict):
+                      return None
+                  valor = valor.get(chave)
+              return valor
 
-          # Método 1: API não oficial.
-          # Pode ser bloqueada pelo Instagram.
-          if RESP=$(curl -fsSL --retry 2 --connect-timeout 10 --max-time 30 \
-            -H "x-ig-app-id: 936619743392459" \
-            -H "User-Agent: Mozilla/5.0" \
-            "https://i.instagram.com/api/v1/users/web_profile_info/?username=$USUARIO"); then
+          def inteiro(valor):
+              if isinstance(valor, bool):
+                  return None
+              if isinstance(valor, int) and valor >= 0:
+                  return valor
+              if isinstance(valor, str) and valor.isdigit():
+                  return int(valor)
+              return None
 
-            SEGUIDORES_EXATOS=$(jq -r 'try (.data.user.edge_followed_by.count // empty) catch empty' <<< "$RESP" 2>/dev/null || true)
-            API_SEGUINDO=$(jq -r 'try (.data.user.edge_follow.count // empty) catch empty' <<< "$RESP" 2>/dev/null || true)
-            API_POSTS=$(jq -r 'try (.data.user.edge_owner_to_timeline_media.count // empty) catch empty' <<< "$RESP" 2>/dev/null || true)
-          else
-            CODIGO=$?
-            echo "::warning::Consulta à API falhou (curl: código $CODIGO); tentando a página pública."
-          fi
+          def analisar_api(texto):
+              try:
+                  obj = json.loads(texto)
+              except (ValueError, TypeError):
+                  return None
+              usuario = buscar(obj, "data", "user")
+              if not isinstance(usuario, dict):
+                  return None
+              if usuario.get("username", "").lower() != USUARIO:
+                  return None
+              seguidores = inteiro(buscar(usuario, "edge_followed_by", "count"))
+              if seguidores is None:
+                  seguidores = inteiro(usuario.get("follower_count"))
+              if seguidores is None:
+                  seguidores = inteiro(usuario.get("followers_count"))
+              seguindo = inteiro(buscar(usuario, "edge_follow", "count"))
+              if seguindo is None:
+                  seguindo = inteiro(usuario.get("following_count"))
+              posts = inteiro(buscar(usuario, "edge_owner_to_timeline_media", "count"))
+              if posts is None:
+                  posts = inteiro(usuario.get("media_count"))
+              return (seguidores, seguindo, posts) if seguidores is not None else None
 
-          if [[ "$SEGUIDORES_EXATOS" =~ ^[0-9]+$ ]]; then
-            # Exemplo: 29345 -> 29,3K; 1200000 -> 1,2M.
-            SEGUIDORES=$(LC_ALL=C awk -v n="$SEGUIDORES_EXATOS" 'BEGIN {
-              if (n >= 1000000) { v = n / 1000000; s = "M" }
-              else if (n >= 1000) { v = n / 1000; s = "K" }
-              else { printf "%d", n; exit }
-              r = sprintf("%.1f", v)
-              sub(/\.0$/, "", r)
-              sub(/\./, ",", r)
-              printf "%s%s", r, s
-            }')
-            [[ "$API_SEGUINDO" =~ ^[0-9]+$ ]] && SEGUINDO="$API_SEGUINDO"
-            [[ "$API_POSTS" =~ ^[0-9]+$ ]] && POSTS="$API_POSTS"
-            echo "Instagram: contagem exata obtida pela API."
-          else
-            # Método 2: descrição pública do perfil.
-            # Pode retornar a contagem já abreviada.
-            if HTML=$(curl -fsSL --retry 2 --connect-timeout 10 --max-time 30 \
-              -A "facebookexternalhit/1.1" \
-              -H "Accept-Language: en-US,en;q=0.9" \
-              "https://www.instagram.com/$USUARIO/"); then
+          class Metadados(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.textos = []
+                  self.titulo_ativo = False
 
-              DESC=$(printf '%s' "$HTML" | grep -oP '<meta property="og:description" content="\K[^"]+' | head -n 1 || true)
-              META_SEGUIDORES=$(printf '%s' "$DESC" | grep -oiP '[0-9][0-9.,]*[KMB]?(?=\s+(?:Followers|Seguidores))' | head -n 1 || true)
+              def handle_starttag(self, tag, attrs):
+                  dados = dict(attrs)
+                  if tag == "title":
+                      self.titulo_ativo = True
+                  if tag == "meta" and (dados.get("property") or dados.get("name") or "").lower() in (
+                      "og:description", "description", "twitter:description"
+                  ):
+                      if dados.get("content"):
+                          self.textos.append(dados["content"])
 
-              if [[ -n "$META_SEGUIDORES" ]]; then
-                SEGUIDORES="${META_SEGUIDORES//./,}"
-                echo "Instagram: contagem abreviada obtida na página pública."
-              fi
-            else
-              CODIGO=$?
-              echo "::warning::Consulta à página falhou (curl: código $CODIGO)."
-            fi
-          fi
+              def handle_endtag(self, tag):
+                  if tag == "title":
+                      self.titulo_ativo = False
 
-          # Sem dado novo, não altera o JSON.
-          if [[ -z "$SEGUIDORES" ]]; then
-            echo "::warning::Nenhuma contagem disponível. Último valor mantido: $ANT_SEGUIDORES."
-            exit 0
-          fi
+              def handle_data(self, data):
+                  if self.titulo_ativo:
+                      self.textos.append(data)
 
-          # Evita commits quando as contagens não mudaram.
-          if [[ "$SEGUIDORES" == "$ANT_SEGUIDORES" && "$SEGUINDO" == "$ANT_SEGUINDO" && "$POSTS" == "$ANT_POSTS" ]]; then
-            echo "Contagens inalteradas: $SEGUIDORES seguidores."
-            exit 0
-          fi
+          NUMERO = r"(\d[\d.,]*\s*(?:[KMB]|milh(?:ão|ões)|mil)?)"
 
-          DATA_ATUAL=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          def campo(texto, rotulos):
+              padrao = rf"(?<![\w]){NUMERO}\s+(?:{rotulos})\b"
+              m = re.search(padrao, texto, re.I)
+              if not m:
+                  m = re.search(rf"(?:{rotulos})\s*[:：]\s*{NUMERO}", texto, re.I)
+              return m.group(1).strip() if m else None
 
-          jq \
-            --arg seguidores "$SEGUIDORES" \
-            --arg seguindo "$SEGUINDO" \
-            --arg posts "$POSTS" \
-            --arg atualizado "$DATA_ATUAL" \
-            '.followers = $seguidores | .following = $seguindo | .posts = $posts | .updated = $atualizado' \
-            "$ARQUIVO" > "${ARQUIVO}.tmp"
+          def numero_meta(valor):
+              if not valor:
+                  return None
+              v = valor.strip().replace(" ", "")
+              m = re.fullmatch(r"([\d.,]+)(K|M|B|mil|milhão|milhões)?", v, re.I)
+              if not m:
+                  return None
+              base, suf = m.groups()
+              if suf:
+                  fator = {"k": 1000, "mil": 1000, "m": 1000000, "milhão": 1000000,
+                           "milhões": 1000000, "b": 1000000000}[suf.lower()]
+                  if base.count(".") + base.count(",") > 1:
+                      return None
+                  try:
+                      return int(round(float(base.replace(",", ".")) * fator))
+                  except ValueError:
+                      return None
+              if "." in base or "," in base:
+                  partes = re.split(r"[.,]", base)
+                  if not all(len(p) == 3 for p in partes[1:]):
+                      return None
+                  base = "".join(partes)
+              return int(base)
 
-          mv "${ARQUIVO}.tmp" "$ARQUIVO"
+          def analisar_html(texto):
+              p = Metadados()
+              p.feed(texto)
+              for descricao in p.textos:
+                  seguidores = numero_meta(campo(descricao, "followers|seguidores"))
+                  if seguidores is None:
+                      continue
+                  seguindo = numero_meta(campo(descricao, "following|seguindo"))
+                  posts = numero_meta(campo(descricao, "posts|publicações|publica(?:ção|ções)"))
+                  return seguidores, seguindo, posts
+              return None
 
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          def abreviar(n):
+              if n < 1000:
+                  return str(n)
+              fator, sufixo = (1000000, "M") if n >= 1000000 else (1000, "K")
+              resultado = f"{n / fator:.1f}".removesuffix(".0").replace(".", ",")
+              return resultado + sufixo
 
-          git add "$ARQUIVO"
-          git commit -m "Instagram: atualiza seguidores (automático)"
-          git push origin HEAD:main
+          fontes = [
+              ("API i.instagram.com", f"https://i.instagram.com/api/v1/users/web_profile_info/?username={USUARIO}", True),
+              ("API www.instagram.com", f"https://www.instagram.com/api/v1/users/web_profile_info/?username={USUARIO}", True),
+              ("Página pública", f"https://www.instagram.com/{USUARIO}/", False),
+              ("Página incorporada", f"https://www.instagram.com/{USUARIO}/embed/", False),
+          ]
+          resultado = None
+          origem = None
+          for nome, url, api in fontes:
+              conteudo = solicitar(nome, url, api)
+              if conteudo is None:
+                  continue
+              resultado = analisar_api(conteudo) if api else analisar_html(conteudo)
+              if resultado and resultado[0] >= 1000:
+                  origem = nome
+                  break
+              resultado = None
+              print(f"{nome}: sem contagem reconhecível do perfil.")
 
-          echo "Atualização concluída: $SEGUIDORES seguidores."
+          if not resultado:
+              print("::error::Instagram não forneceu seguidores por nenhum dos métodos públicos. JSON preservado.")
+              sys.exit(1)
+
+          seguidores, seguindo, posts = resultado
+          atual = json.loads(ARQUIVO.read_text(encoding="utf-8"))
+          novo = dict(atual)
+          novo["followers"] = abreviar(seguidores)
+          novo["followers_exact"] = seguidores if origem.startswith("API") else None
+          if seguindo is not None:
+              novo["following"] = str(seguindo)
+          if posts is not None:
+              novo["posts"] = str(posts)
+          novo["updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+          novo["source"] = origem
+          ARQUIVO.write_text(json.dumps(novo, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+          print(f"Consulta confirmada via {origem}: {seguidores} seguidores ({novo['followers']}).")
+          subprocess.run(["git", "config", "user.name", "github-actions[bot]"], check=True)
+          subprocess.run(["git", "config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com"], check=True)
+          subprocess.run(["git", "add", str(ARQUIVO)], check=True)
+          if subprocess.run(["git", "diff", "--cached", "--quiet"]).returncode == 0:
+              print("JSON sem alterações.")
+          else:
+              subprocess.run(["git", "commit", "-m", "Instagram: atualiza seguidores automaticamente"], check=True)
+              subprocess.run(["git", "pull", "--rebase", "origin", "main"], check=True)
+              subprocess.run(["git", "push", "origin", "HEAD:main"], check=True)
+          PY
